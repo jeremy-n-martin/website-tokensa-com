@@ -14,7 +14,7 @@
             <th>7d %</th>
             <th>Market Cap</th>
         </tr>
-        {% for name, price, market_cap in cryptos %}
+        {% for name, price, rate_1h, rate_24h, rate_7d, market_cap in cryptos %}
             <tr>
                 <td>{{ name }}</td>
                 <td>{{ price }}</td>
