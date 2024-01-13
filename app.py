@@ -1,18 +1,23 @@
 import requests
 from bs4 import BeautifulSoup
-
-
 from flask import Flask
 
 app = Flask(__name__)
 
+
+
 @app.route('/')
 def hello():
-    return 'Hello, Heroku!'
+    cryptos = get_cryptocurrencies('https://coinmarketcap.com/')
+    for name, market_cap in cryptos:
+        print(f"{name}: {market_cap}")
+    return
 
 if __name__ == '__main__':
     app.run(debug=True)
     
+
+
 
 def get_cryptocurrencies(url):
     # Fetch the content from the URL
@@ -32,13 +37,3 @@ def get_cryptocurrencies(url):
         cryptos.append((name, market_cap))
 
     return cryptos
-
-# URL of the CoinMarketCap page listing cryptocurrencies
-url = 'https://coinmarketcap.com/'
-
-# Get the list of cryptocurrencies and their market caps
-cryptos = get_cryptocurrencies(url)
-
-# Print the result
-for name, market_cap in cryptos:
-    print(f"{name}: {market_cap}")
