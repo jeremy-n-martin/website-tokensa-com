@@ -9,19 +9,13 @@
         <tr>
             <th>Name</th>
             <th>Price</th>
-            <th>1h %</th>
-            <th>24h %</th>
-            <th>7d %</th>
-            <th>Market Cap</th>
+            <th>%</th>
         </tr>
-        {% for name, price, rate_1h, rate_24h, rate_7d, market_cap in cryptos %}
+        {% for name, price, rate in cryptos %}
             <tr>
                 <td>{{ name }}</td>
                 <td>{{ price }}</td>
-                <td>{{ rate_1h }}</td>
-                <td>{{ rate_24h }}</td>
-                <td>{{ rate_7d }}</td>
-                <td>{{ market_cap }}</td>
+                <td>{{ rate }}</td>
             </tr>
         {% endfor %}
     </table>
