@@ -5,10 +5,29 @@
 </head>
 <body>
     <h1>Cryptocurrency Market Caps</h1>
-    <ul>
-        {% for name, market_cap in cryptos %}
-            <li>{{ name }}: {{ market_cap }}</li>
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>1h %</th>
+            <th>24h %</th>
+            <th>7d %</th>
+            <th>Market Cap</th>
+        </tr>
+        {% for name, price, market_cap in cryptos %}
+            <tr>
+                <td>{{ name }}</td>
+                <td>{{ price }}</td>
+                <td>{{ rate_1h }}</td>
+                <td>{{ rate_24h }}</td>
+                <td>{{ rate_7d }}</td>
+                <td>{{ market_cap }}</td>
+            </tr>
         {% endfor %}
-    </ul>
+    </table>
 </body>
+
 </html>
+
+
+

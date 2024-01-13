@@ -13,8 +13,12 @@ def get_cryptocurrencies(url):
     for row in crypto_table.find_all('tr')[1:]:  # Skip header
         columns = row.find_all('td')
         name = columns[2].text.strip()  # Adjust index as needed
-        market_cap = columns[3].text.strip()  # Adjust index as needed
-        cryptos.append((name, market_cap))
+        price = columns[3].text.strip()  # Adjust index as needed
+        rate_1h = columns[4].text.strip()  # Adjust index as needed
+        rate_24h = columns[5].text.strip()  # Adjust index as needed
+        rate_7d = columns[6].text.strip()  # Adjust index as needed
+        market_cap = columns[7].text.strip()  # Adjust index as needed
+        cryptos.append((name, price, rate_1h, rate_24h, rate_7d, market_cap))
 
     return cryptos
 
