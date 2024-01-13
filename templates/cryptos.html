@@ -2,26 +2,25 @@
 <html>
 <head>
     <title>Cryptocurrencies</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
     <h1>Cryptocurrency Market Caps</h1>
-    <table border="1">
+    <table>
         <tr>
+            <th>Logo</th>
             <th>Name</th>
-            <th>Price</th>
-            <th>%</th>
+            <th>Rate</th>
+            <th>Cap</th>
         </tr>
-        {% for name, price, rate in cryptos %}
+        {% for logo, name, rate, cap in cryptos %}
             <tr>
+                <td><img src="{{ url_for('static', filename=logo) }}"  width="20" height="20" /></td>
                 <td>{{ name }}</td>
-                <td>{{ price }}</td>
                 <td>{{ rate }}</td>
+                <td>{{ cap }}</td>
             </tr>
         {% endfor %}
     </table>
 </body>
-
 </html>
-
-
-
