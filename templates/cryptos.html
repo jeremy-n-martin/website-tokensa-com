@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cryptocurrencies</title>
+</head>
+<body>
+    <h1>Cryptocurrency Market Caps</h1>
+    <ul>
+        {% for name, market_cap in cryptos %}
+            <li>{{ name }}: {{ market_cap }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
