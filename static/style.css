@@ -1,0 +1,13 @@
+table {
+
+    border: 1px solid #ccc; /* Add a 1px solid border */
+}
+
+th, td {
+    border: 2px solid #aaaa; /* Add a 1px solid border */
+}
+
+td img {
+    display: block; /* Make the image a block element */
+    margin: 0 auto; /* Center-align the image horizontally */
+}
