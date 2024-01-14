@@ -3,6 +3,12 @@
 <head>
     <title>Cryptocurrencies</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .high { background-color: #00ff00; } /* Green for high rates */
+        .medium { background-color: #ffff00; } /* Yellow for medium rates */
+        .low { background-color: #ff0000; } /* Red for low rates */
+    </style>
 </head>
 <body>
     <h1>Cryptocurrency Market Caps</h1>
@@ -14,10 +20,16 @@
             <th>Cap</th>
         </tr>
         {% for logo, name, rate, cap in cryptos %}
+            {% set rate_class = 'low' %}
+            {% if rate|float >= 90 %}
+                {% set rate_class = 'high' %}
+            {% elif rate|float >= 85 %}
+                {% set rate_class = 'medium' %}
+            {% endif %}
             <tr>
                 <td><img src="{{ url_for('static', filename=logo) }}"  width="20" height="20" /></td>
                 <td>{{ name }}</td>
-                <td>{{ rate }}</td>
+                <td class="{{ rate_class }}">{{ rate }}</td>
                 <td>{{ cap }}</td>
             </tr>
         {% endfor %}
