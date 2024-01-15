@@ -12,14 +12,17 @@
 </head>
 <body>
     <h1>Cryptocurrency Market Caps</h1>
+
     <table>
         <tr>
             <th>Logo</th>
             <th>Name</th>
             <th>Rate</th>
             <th>Cap</th>
+            <th>Price</th>
+            <th>Change 24h</th>
         </tr>
-        {% for logo, name, rate, cap in cryptos %}
+        {% for logo, name, rate, cap, price, change_24h in cryptos %}
             {% set rate_class = 'low' %}
             {% if rate|float >= 90 %}
                 {% set rate_class = 'high' %}
@@ -30,7 +33,10 @@
                 <td><img src="{{ url_for('static', filename=logo) }}"  width="20" height="20" /></td>
                 <td>{{ name }}</td>
                 <td class="{{ rate_class }}">{{ rate }}</td>
-                <td>{{ cap }}</td>
+                <td class="cap-column">{{ cap }}</td>
+                <td class="price-column">{{ price }}</td>
+                <td class="change_24h-column">{{ change_24h }}</td>
+
             </tr>
         {% endfor %}
     </table>

@@ -11,3 +11,15 @@ td img {
     display: block; /* Make the image a block element */
     margin: 0 auto; /* Center-align the image horizontally */
 }
+
+table td.price-column {
+    text-align: right;
+}
+
+table td.cap-column {
+    text-align: right;
+}
+
+table td.change_24h-column {
+    text-align: right;
+}

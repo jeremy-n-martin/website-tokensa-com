@@ -1,11 +1,28 @@
 import requests
+import os
+from dotenv import load_dotenv
 from bs4 import BeautifulSoup
 from flask import Flask, render_template
 
+load_dotenv()  # Charge les variables d'environnement à partir de .env
+
 app = Flask(__name__)
 
+def get_crypto_price(symbol):
+    """Récupère le prix d'une crypto-monnaie et le changement sur 24h depuis l'API Binance."""
+    url = f"https://api.binance.com/api/v3/ticker/24hr?symbol={symbol}USDT"
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        last_price = float(data['lastPrice']) if 'lastPrice' in data else None
+        price_change_percent = float(data['priceChangePercent']) if 'priceChangePercent' in data else None
+        return last_price, round(price_change_percent, 2)
+    else:
+        return None, None
+    
 @app.route('/')
 def index():
+
     cryptos = [
         ('assets/btc.png', 'BTC', '96.87', '83400'),
         ('assets/eth.png', 'ETH', '96.23', '30500'),
@@ -47,9 +64,13 @@ def index():
         ('assets/sxp.png', 'SXP', '91.62', '21'),
         ('assets/sfund.png', 'SFUND', '90.11', '19'),
     ]
-    sorted_cryptos = sorted(cryptos, key=lambda x: int(x[3]), reverse=True)
-    return render_template('index.html', cryptos=sorted_cryptos)
-
+    updated_cryptos = []
+    for crypto in cryptos:
+        symbol = crypto[1]
+        price, change_24h = get_crypto_price(symbol)
+        updated_cryptos.append(crypto + (price, change_24h))
+    cryptos = sorted(updated_cryptos, key=lambda x: int(x[3]), reverse=True)
+    return render_template('index.html', cryptos=cryptos)
 
 
 if __name__ == '__main__':
