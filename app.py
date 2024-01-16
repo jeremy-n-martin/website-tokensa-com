@@ -1,10 +1,8 @@
 import requests
 import os
-from dotenv import load_dotenv
 from bs4 import BeautifulSoup
 from flask import Flask, render_template
 
-load_dotenv()  # Charge les variables d'environnement à partir de .env
 
 app = Flask(__name__)
 

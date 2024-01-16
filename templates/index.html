@@ -5,9 +5,9 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 
     <style>
-        .high { background-color: #00ff00; } /* Green for high rates */
-        .medium { background-color: #ffff00; } /* Yellow for medium rates */
-        .low { background-color: #ff0000; } /* Red for low rates */
+        .high { background-color: #89b87044; } /* Green for high rates */
+        .medium { background-color: #ffff0036; } /* Yellow for medium rates */
+        .low { background-color: #8f53532f; } /* Red for low rates */
     </style>
 </head>
 <body>
@@ -34,7 +34,13 @@
                 <td>{{ name }}</td>
                 <td class="{{ rate_class }}">{{ rate }}</td>
                 <td class="cap-column">{{ cap }}</td>
-                <td class="price-column">{{ price }}</td>
+                <td class="price-column">
+                    {% if price is none %}
+                        No Price
+                    {% else %}
+                        {{ '{:.6f}'.format(price) }}
+                    {% endif %}
+                </td>
                 <td class="change_24h-column">{{ change_24h }}</td>
 
             </tr>
