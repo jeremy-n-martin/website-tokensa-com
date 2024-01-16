@@ -5,9 +5,11 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 
     <style>
+        .vhigh { background-color: #5ec5c353; } /* Blue for high rates */
         .high { background-color: #89b87044; } /* Green for high rates */
         .medium { background-color: #ffff0036; } /* Yellow for medium rates */
         .low { background-color: #8f53532f; } /* Red for low rates */
+        .vlow { background-color: #94478748; } /* Violet for low rates */
     </style>
 </head>
 <body>
@@ -15,19 +17,33 @@
 
     <table>
         <tr>
-            <th>Logo</th>
+            <th></th>
             <th>Name</th>
             <th>Rate</th>
             <th>Cap</th>
             <th>Price</th>
-            <th>Change 24h</th>
+            <th>24h %</th>
         </tr>
         {% for logo, name, rate, cap, price, change_24h in cryptos %}
-            {% set rate_class = 'low' %}
-            {% if rate|float >= 90 %}
+            {% set rate_class = 'medium' %}
+            {% if rate|float >= 94 %}
+                {% set rate_class = 'vhigh' %}
+            {% elif rate|float >= 92 %}
                 {% set rate_class = 'high' %}
-            {% elif rate|float >= 85 %}
-                {% set rate_class = 'medium' %}
+            {% elif rate|float <= 88 %}
+                {% set rate_class = 'vlow' %}
+            {% elif rate|float <= 90 %}
+                {% set rate_class = 'low' %}
+            {% endif %}
+            {% set change_class = 'medium' %}
+            {% if change_24h|float >= 10 %}
+                {% set change_class = 'vhigh' %}
+            {% elif change_24h|float >= 5 %}
+                {% set change_class = 'high' %}
+            {% elif change_24h|float <= -10 %}
+                {% set change_class = 'vlow' %}
+            {% elif change_24h|float <= -5 %}
+                {% set change_class = 'low' %}
             {% endif %}
             <tr>
                 <td><img src="{{ url_for('static', filename=logo) }}"  width="20" height="20" /></td>
@@ -41,7 +57,7 @@
                         {{ '{:.6f}'.format(price) }}
                     {% endif %}
                 </td>
-                <td class="change_24h-column">{{ change_24h }}</td>
+                <td class="change_24h-column {{ change_class }}">{{ change_24h }}</td>
 
             </tr>
         {% endfor %}
