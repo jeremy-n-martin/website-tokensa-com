@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cryptocurrencies</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+        .vhigh { background-color: #5ec5c353; } /* Blue for high rates */
+        .high { background-color: #89b87044; } /* Green for high rates */
+        .medium { background-color: #ffff0036; } /* Yellow for medium rates */
+        .low { background-color: #8f53532f; } /* Red for low rates */
+        .vlow { background-color: #94478748; } /* Violet for low rates */
+    </style>
+</head>
+<body>
+    <h1>Cryptocurrency Market Caps</h1>
+
+    <table>
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Rate</th>
+            <th>Cap</th>
+        </tr>
+        {% for logo, name, rate, cap in cryptos %}
+            {% set rate_class = 'medium' %}
+            {% if rate|float >= 94 %}
+                {% set rate_class = 'vhigh' %}
+            {% elif rate|float >= 92 %}
+                {% set rate_class = 'high' %}
+            {% elif rate|float <= 88 %}
+                {% set rate_class = 'vlow' %}
+            {% elif rate|float <= 90 %}
+                {% set rate_class = 'low' %}
+            {% endif %}
+            <tr>
+                <td><img src="{{ url_for('static', filename=logo) }}"  width="20" height="20" /></td>
+                <td>{{ name }}</td>
+                <td class="{{ rate_class }}">{{ rate }}</td>
+                <td class="cap-column">{{ cap }}</td>
+
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

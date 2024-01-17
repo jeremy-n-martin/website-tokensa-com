@@ -68,10 +68,10 @@ def index():
     updated_cryptos = []
     for crypto in cryptos:
         symbol = crypto[1]
-        price, change_24h = get_crypto_price(symbol)
-        updated_cryptos.append(crypto + (price, change_24h))
-    cryptos = sorted(updated_cryptos, key=lambda x: int(x[5]) if x[5] is not None else 0, reverse=True)
-    return render_template('index.html', cryptos=cryptos)
+        #price, change_24h = get_crypto_price(symbol)
+        #updated_cryptos.append(crypto + (price, change_24h))
+    #cryptos = sorted(updated_cryptos, key=lambda x: int(x[5]) if x[5] is not None else 0, reverse=True)
+    return render_template('index2.html', cryptos=cryptos)
 
 
 if __name__ == '__main__':
