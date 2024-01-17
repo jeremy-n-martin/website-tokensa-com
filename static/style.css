@@ -23,3 +23,15 @@ table td.cap-column {
 table td.change_24h-column {
     text-align: right;
 }
+
+table td.change_1h-column {
+    text-align: right;
+}
+
+table td.change_7d-column {
+    text-align: right;
+}
+
+table td.market_cap-column {
+    text-align: right;
+}

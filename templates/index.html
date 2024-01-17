@@ -20,11 +20,13 @@
             <th></th>
             <th>Name</th>
             <th>Rate</th>
-            <th>Cap</th>
             <th>Price</th>
+            <th>1h %</th>
             <th>24h %</th>
+            <th>7d %</th>
+            <th>Market Cap</th>
         </tr>
-        {% for logo, name, rate, cap, price, change_24h in cryptos %}
+        {% for logo, name, rate, price, change_24h, change_1h, change_7d, market_cap in cryptos %}
             {% set rate_class = 'medium' %}
             {% if rate|float >= 94 %}
                 {% set rate_class = 'vhigh' %}
@@ -35,21 +37,40 @@
             {% elif rate|float <= 90 %}
                 {% set rate_class = 'low' %}
             {% endif %}
-            {% set change_class = 'medium' %}
+            {% set change_24h_class = 'medium' %}
             {% if change_24h|float >= 10 %}
-                {% set change_class = 'vhigh' %}
+                {% set change_24h_class = 'vhigh' %}
             {% elif change_24h|float >= 5 %}
-                {% set change_class = 'high' %}
+                {% set change_24h_class = 'high' %}
             {% elif change_24h|float <= -10 %}
-                {% set change_class = 'vlow' %}
+                {% set change_24h_class = 'vlow' %}
             {% elif change_24h|float <= -5 %}
-                {% set change_class = 'low' %}
+                {% set change_24h_class = 'low' %}
+            {% endif %}
+            {% set change_1h_class = 'medium' %}
+            {% if change_1h|float >= 10 %}
+                {% set change_1h_class = 'vhigh' %}
+            {% elif change_1h|float >= 5 %}
+                {% set change_1h_class = 'high' %}
+            {% elif change_1h|float <= -10 %}
+                {% set change_1h_class = 'vlow' %}
+            {% elif change_1h|float <= -5 %}
+                {% set change_1h_class = 'low' %}
+            {% endif %}
+            {% set change_7d_class = 'medium' %}
+            {% if change_7d|float >= 10 %}
+                {% set change_7d_class = 'vhigh' %}
+            {% elif change_7d|float >= 5 %}
+                {% set change_7d_class = 'high' %}
+            {% elif change_7d|float <= -10 %}
+                {% set change_7d_class = 'vlow' %}
+            {% elif change_7d|float <= -5 %}
+                {% set change_7d_class = 'low' %}
             {% endif %}
             <tr>
                 <td><img src="{{ url_for('static', filename=logo) }}"  width="20" height="20" /></td>
                 <td>{{ name }}</td>
                 <td class="{{ rate_class }}">{{ rate }}</td>
-                <td class="cap-column">{{ cap }}</td>
                 <td class="price-column">
                     {% if price is none %}
                         No Price
@@ -57,7 +78,10 @@
                         {{ '{:.6f}'.format(price) }}
                     {% endif %}
                 </td>
-                <td class="change_24h-column {{ change_class }}">{{ change_24h }}</td>
+                <td class="change_1h-column {{ change_24h_class }}">{{ '{:.2f}'.format(change_1h) if change_1h is not none else 'N/A' }}</td>
+                <td class="change_24h-column {{ change_1h_class }}">{{ change_24h }}</td>
+                <td class="change_7d-column {{ change_7d_class }}">{{ '{:.2f}'.format(change_7d) if change_7d is not none else 'N/A' }}</td>
+                <td class="market_cap-column">{{ '{:,.2f}'.format(market_cap) if market_cap is not none else 'N/A' }}</td>
 
             </tr>
         {% endfor %}

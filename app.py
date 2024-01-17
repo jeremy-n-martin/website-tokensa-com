@@ -1,78 +1,115 @@
 import requests
 import os
+import logging
 from bs4 import BeautifulSoup
 from flask import Flask, render_template
 
 
 app = Flask(__name__)
 
-def get_crypto_price(symbol):
-    """Récupère le prix d'une crypto-monnaie et le changement sur 24h depuis l'API Binance."""
-    url = f"https://api.binance.com/api/v3/ticker/24hr?symbol={symbol}USDT"
-    response = requests.get(url)
-    if response.status_code == 200:
-        data = response.json()
-        last_price = float(data['lastPrice']) if 'lastPrice' in data else None
-        price_change_percent = float(data['priceChangePercent']) if 'priceChangePercent' in data else None
-        return last_price, round(price_change_percent, 2)
-    else:
-        return None, None
+def get_crypto_prices(symbols):
+    """Get the prices, 24h changes, 1h changes, 7d changes, and market caps of multiple cryptocurrencies."""
+    api_key = os.getenv("COINMARKETCAP_API_KEY")
+    url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
+    parameters = {
+        'symbol': ','.join(symbols),
+        'convert': 'USD'
+    }
+    headers = {
+        'Accepts': 'application/json',
+        'X-CMC_PRO_API_KEY': api_key,
+    }
+
+    try:
+        response = requests.get(url, headers=headers, params=parameters)
+        if response.status_code == 200:
+            data = response.json()
+            prices = {}
+            for symbol in symbols:
+                if symbol in data['data']:
+                    quote = data['data'][symbol]['quote']['USD']
+                    price = quote['price']
+                    price_change_24h = quote['percent_change_24h']
+                    price_change_1h = quote['percent_change_1h']
+                    price_change_7d = quote['percent_change_7d']
+                    market_cap = quote['market_cap']
+                    prices[symbol] = (round(price, 2) if price is not None else None, 
+                                      round(price_change_24h, 2) if price_change_24h is not None else None,
+                                      round(price_change_1h, 2) if price_change_1h is not None else None,
+                                      round(price_change_7d, 2) if price_change_7d is not None else None,
+                                      round(market_cap, 2) if market_cap is not None else None)
+                else:
+                    logging.warning(f"Symbol {symbol} not found in API response")
+                    prices[symbol] = (None, None, None, None, None)
+            return prices
+        else:
+            logging.error(f"API request failed with status code {response.status_code}")
+            return {symbol: (None, None, None, None, None) for symbol in symbols}
+    except requests.exceptions.RequestException as e:
+        logging.error(f"API request exception: {e}")
+        return {symbol: (None, None, None, None, None) for symbol in symbols}
+
+
     
 @app.route('/')
 def index():
 
     cryptos = [
-        ('assets/btc.png', 'BTC', '96.87', '8340'),
-        ('assets/eth.png', 'ETH', '96.23', '3050'),
-        ('assets/bnb.png', 'BNB', '92.57', '462'),
-        ('assets/sol.png', 'SOL', '91.96', '424'),
-        ('assets/xrp.png', 'XRP', '94.25', '312'),
-        ('assets/ada.png', 'ADA', '89.19', '193'),
-        ('assets/avax.png', 'AVAX', '94.12', '134'),
-        ('assets/doge.png', 'DOGE', '86.88', '117'),
-        ('assets/tron.png', 'TRON', '88.20', '100'),
-        ('assets/dot.png', 'DOT', '83.80', '97'),
-        ('assets/link.png', 'LINK', '87.03', '86'),
-        ('assets/wemix.png', 'WEMIX', '93.91', '146'),
-        ('assets/matic.png', 'MATIC', '93.27', '84'),
-        ('assets/ton.png', 'TON', '92.91', '73'),
-        ('assets/shib.png', 'SHIB', '90.81', '58'),
-        ('assets/uni.png', 'UNI', '94.28', '41'),
-        ('assets/atom.png', 'ATOM', '94.25', '39'),
-        ('assets/leo.png', 'LEO', '86.06', '37'),
-        ('assets/inj.png', 'INJ', '84.13', '34'),
-        ('assets/apt.png', 'APT', '94.28', '33'),
-        ('assets/imx.png', 'IMX', '89.76', '27'),
-        ('assets/sei.png', 'SEI', '90.37', '17'),
-        ('assets/rune.png', 'RUNE', '89.75', '15'),
-        ('assets/sand.png', 'SAND', '93.39', '10'),
-        ('assets/theta.png', 'THETA', '91.59', '10'),
-        ('assets/chz.png', 'CHZ', '92.30', '7'),
-        ('assets/gala.png', 'GALA', '94.59', '7'),
-        ('assets/cake.png', 'CAKE', '93.49', '7'),
-        ('assets/frax.png', 'FRAX', '91.59', '6'),
-        ('assets/1inch.png', '1INCH', '93.07', '5'),
-        ('assets/fet.png', 'FET', '91.97', '5'),
-        ('assets/axl.png', 'AXL', '92.41', '5'),
-        ('assets/twt.png', 'TWT', '92.84', '4'),
-        ('assets/core.png', 'CORE', '90.39', '4'),
-        ('assets/enj.png', 'ENJ', '92.08', '4'),
-        ('assets/ftn.png', 'FTN', '90.45', '4'),
-        ('assets/paxg.png', 'PAXG', '93.61', '4'),
-        ('assets/iotx.png', 'IOTX', '92.30', '4'),
-        ('assets/trb.png', 'TRB', '91.30', '3'),
-        ('assets/floki.png', 'FLOKI', '91.93', '2'),
-        ('assets/sxp.png', 'SXP', '91.62', '2'),
-        ('assets/sfund.png', 'SFUND', '90.11', '1'),
+        ('assets/btc.png', 'BTC'    , '96.87' ),
+        ('assets/eth.png', 'ETH'    , '96.23' ),
+        ('assets/bnb.png', 'BNB'    , '92.57' ),
+        ('assets/sol.png', 'SOL'    , '91.96' ),
+        ('assets/xrp.png', 'XRP'    , '94.25' ),
+        ('assets/ada.png', 'ADA'    , '89.19' ),
+        ('assets/avax.png', 'AVAX'  , '94.12' ),
+        ('assets/doge.png', 'DOGE'  , '86.88' ),
+        ('assets/trx.png', 'TRX'    , '88.20' ),
+        ('assets/dot.png', 'DOT'    , '83.80' ),
+        ('assets/link.png', 'LINK'  , '87.03' ),
+        ('assets/wemix.png', 'WEMIX', '93.91' ),
+        ('assets/matic.png', 'MATIC', '93.27' ),
+        ('assets/ton.png', 'TON'    , '92.91' ),
+        ('assets/shib.png', 'SHIB'  , '90.81' ),
+        ('assets/uni.png', 'UNI'    , '94.28' ),
+        ('assets/atom.png', 'ATOM'  , '94.25' ),
+        ('assets/leo.png', 'LEO'    , '86.06' ),
+        ('assets/inj.png', 'INJ'    , '84.13' ),
+        ('assets/apt.png', 'APT'    , '94.28' ),
+        ('assets/imx.png', 'IMX'    , '89.76' ),
+        ('assets/sei.png', 'SEI'    , '90.37' ),
+        ('assets/rune.png', 'RUNE'  , '89.75' ),
+        ('assets/sand.png', 'SAND'  , '93.39' ),
+        ('assets/theta.png', 'THETA', '91.59' ),
+        ('assets/chz.png', 'CHZ'    , '92.30' ),
+        ('assets/gala.png', 'GALA'  , '94.59' ),
+        ('assets/cake.png', 'CAKE'  , '93.49' ),
+        ('assets/frax.png', 'FRAX'  , '91.59' ),
+        ('assets/1inch.png', '1INCH', '93.07' ),
+        ('assets/fet.png', 'FET'    , '91.97' ),
+        ('assets/axl.png', 'AXL'    , '92.41' ),
+        ('assets/twt.png', 'TWT'    , '92.84' ),
+        ('assets/core.png', 'CORE'  , '90.39' ),
+        ('assets/enj.png', 'ENJ'    , '92.08' ),
+        ('assets/ftn.png', 'FTN'    , '90.45' ),
+        ('assets/paxg.png', 'PAXG'  , '93.61' ),
+        ('assets/iotx.png', 'IOTX'  , '92.30' ),
+        ('assets/trb.png', 'TRB'    , '91.30' ),
+        ('assets/floki.png', 'FLOKI', '91.93' ),
+        ('assets/sxp.png', 'SXP'    , '91.62' ),
+        ('assets/sfund.png', 'SFUND', '90.11' ),
     ]
+
+    symbols = [crypto[1] for crypto in cryptos]
+    prices = get_crypto_prices(symbols)
+
     updated_cryptos = []
     for crypto in cryptos:
         symbol = crypto[1]
-        #price, change_24h = get_crypto_price(symbol)
-        #updated_cryptos.append(crypto + (price, change_24h))
-    #cryptos = sorted(updated_cryptos, key=lambda x: int(x[5]) if x[5] is not None else 0, reverse=True)
-    return render_template('index2.html', cryptos=cryptos)
+        price, change_24h, change_1h, change_7d, market_cap = prices.get(symbol, (None, None, None, None, None))
+        updated_cryptos.append(crypto + (price, change_24h, change_1h, change_7d, market_cap))
 
+    cryptos = sorted(updated_cryptos, key=lambda x: x[7] if x[7] is not None else 0, reverse=True)
+    return render_template('index.html', cryptos=cryptos)
 
 if __name__ == '__main__':
     app.run(debug=True)
