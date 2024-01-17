@@ -4,8 +4,37 @@ import logging
 from bs4 import BeautifulSoup
 from flask import Flask, render_template
 
-
 app = Flask(__name__)
+
+def get_class_for_rate(rate):
+    """Determine the CSS class based on rate value."""
+    if rate is None:
+        return 'medium'
+    if rate >= 94:
+        return 'vhigh'
+    elif rate >= 92:
+        return 'high'
+    elif rate <= 88:
+        return 'vlow'
+    elif rate <= 90:
+        return 'low'
+    else:
+        return 'medium'
+
+def get_class_for_change(change):
+    """Determine the CSS class based on change percentage."""
+    if change is None:
+        return 'medium'
+    if change >= 10:
+        return 'vhigh'
+    elif change >= 5:
+        return 'high'
+    elif change <= -10:
+        return 'vlow'
+    elif change <= -5:
+        return 'low'
+    else:
+        return 'medium'
 
 def get_crypto_prices(symbols):
     """Get the prices, 24h changes, 1h changes, 7d changes, and market caps of multiple cryptocurrencies."""
@@ -49,11 +78,8 @@ def get_crypto_prices(symbols):
         logging.error(f"API request exception: {e}")
         return {symbol: (None, None, None, None, None) for symbol in symbols}
 
-
-    
 @app.route('/')
 def index():
-
     cryptos = [
         ('assets/btc.png', 'BTC'    , '96.87' ),
         ('assets/eth.png', 'ETH'    , '96.23' ),
@@ -106,7 +132,11 @@ def index():
     for crypto in cryptos:
         symbol = crypto[1]
         price, change_24h, change_1h, change_7d, market_cap = prices.get(symbol, (None, None, None, None, None))
-        updated_cryptos.append(crypto + (price, change_24h, change_1h, change_7d, market_cap))
+        rate_class = get_class_for_rate(float(crypto[2]))
+        change_24h_class = get_class_for_change(change_24h)
+        change_1h_class = get_class_for_change(change_1h)
+        change_7d_class = get_class_for_change(change_7d)
+        updated_cryptos.append(crypto + (price, change_24h, change_1h, change_7d, market_cap, rate_class, change_24h_class, change_1h_class, change_7d_class))
 
     cryptos = sorted(updated_cryptos, key=lambda x: x[7] if x[7] is not None else 0, reverse=True)
     return render_template('index.html', cryptos=cryptos)

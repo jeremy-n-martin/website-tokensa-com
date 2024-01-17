@@ -1,37 +1,29 @@
 table {
-
-    border: 1px solid #ccc; /* Add a 1px solid border */
+    border: 1px solid #ccc;
 }
 
 th, td {
-    border: 2px solid #aaaa; /* Add a 1px solid border */
+    border: 2px solid #aaaa;
 }
 
 td img {
-    display: block; /* Make the image a block element */
-    margin: 0 auto; /* Center-align the image horizontally */
+    display: block;
+    margin: 0 auto;
 }
 
-table td.price-column {
+.price-column,
+.cap-column,
+.change_24h-column,
+.change_1h-column,
+.change_7d-column,
+.market_cap-column {
     text-align: right;
 }
 
-table td.cap-column {
-    text-align: right;
-}
 
-table td.change_24h-column {
-    text-align: right;
-}
 
-table td.change_1h-column {
-    text-align: right;
-}
 
-table td.change_7d-column {
-    text-align: right;
-}
 
-table td.market_cap-column {
-    text-align: right;
-}
+
+
+
