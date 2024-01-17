@@ -4,12 +4,17 @@
     <title>Cryptocurrencies</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
     <style>
-        .vhigh { background-color: #5ec5c353; } /* Blue for high rates */
-        .high { background-color: #89b87044; } /* Green for high rates */
-        .medium { background-color: #ffff0036; } /* Yellow for medium rates */
-        .low { background-color: #8f53532f; } /* Red for low rates */
-        .vlow { background-color: #94478748; } /* Violet for low rates */
+        .vhigh { background-color: #5ec5c353; }
+        .high { background-color: #89b87044; }
+        .medium { background-color: #ffff0036; }
+        .low { background-color: #8f53532f; }
+        .vlow { background-color: #94478748; }
     </style>
+    <script>
+        function sortTable(column) {
+            window.location.href = '/sort/' + column + '/' + (window.location.pathname.includes(column + '/desc') ? 'asc' : 'desc');
+        }
+    </script>
 </head>
 <body>
     <h1>Cryptocurrency Market Caps</h1>
@@ -19,26 +24,26 @@
             <tr>
                 <th></th>
                 <th>Name</th>
-                <th>Rate</th>
-                <th>Price</th>
-                <th>1h %</th>
-                <th>24h %</th>
-                <th>7d %</th>
-                <th>Market Cap</th>
+                <th><button onclick="sortTable('market_cap')">M. Cap</button></th>
+                <th><button onclick="sortTable('price')">$ Price</button></th>
+                <th><button onclick="sortTable('change_1h')">1h %</button></th>
+                <th><button onclick="sortTable('change_24h')">24h %</button></th>
+                <th><button onclick="sortTable('change_7d')">7d %</button></th>
+                <th><button onclick="sortTable('rate')">Rate</button></th>
             </tr>
         </thead>
         <tbody>
             {% for logo, name, rate, price, change_24h, change_1h, change_7d, market_cap, rate_class, change_24h_class, change_1h_class, change_7d_class in cryptos %}
-            <tr>
-                <td><img src="{{ url_for('static', filename=logo) }}" width="20" height="20" /></td>
-                <td>{{ name }}</td>
-                <td class="{{ rate_class }}">{{ rate }}</td>
-                <td class="price-column">{{ price if price is not none else 'No Price' }}</td>
-                <td class="change_1h-column {{ change_1h_class }}">{{ change_1h if change_1h is not none else 'N/A' }}</td>
-                <td class="change_24h-column {{ change_24h_class }}">{{ change_24h if change_24h is not none else 'N/A' }}</td>
-                <td class="change_7d-column {{ change_7d_class }}">{{ change_7d if change_7d is not none else 'N/A' }}</td>
-                <td class="market_cap-column">{{ '{:,.2f}'.format(market_cap) if market_cap is not none else 'N/A' }}</td>
-            </tr>
+                <tr>
+                    <td><img src="{{ url_for('static', filename=logo) }}" width="20" height="20" /></td>
+                    <td>{{ name }}</td>
+                    <td class="market_cap-column">{{ market_cap if market_cap is not none else 'N/A' }} M</td>
+                    <td class="price-column">{{ price if price is not none else 'No Price' }}</td>
+                    <td class="change_1h-column {{ change_1h_class }}">{{ change_1h if change_1h is not none else 'N/A' }}</td>
+                    <td class="change_24h-column {{ change_24h_class }}">{{ change_24h if change_24h is not none else 'N/A' }}</td>
+                    <td class="change_7d-column {{ change_7d_class }}">{{ change_7d if change_7d is not none else 'N/A' }}</td>
+                    <td class="{{ rate_class }}">{{ rate }}</td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>

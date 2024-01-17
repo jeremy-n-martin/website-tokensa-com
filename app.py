@@ -1,8 +1,7 @@
 import requests
 import os
 import logging
-from bs4 import BeautifulSoup
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
@@ -58,13 +57,13 @@ def get_crypto_prices(symbols):
                 if symbol in data['data']:
                     quote = data['data'][symbol]['quote']['USD']
                     price = quote['price']
-                    price_change_24h = quote['percent_change_24h']
                     price_change_1h = quote['percent_change_1h']
+                    price_change_24h = quote['percent_change_24h']
                     price_change_7d = quote['percent_change_7d']
                     market_cap = quote['market_cap']
                     prices[symbol] = (round(price, 2) if price is not None else None, 
-                                      round(price_change_24h, 2) if price_change_24h is not None else None,
                                       round(price_change_1h, 2) if price_change_1h is not None else None,
+                                      round(price_change_24h, 2) if price_change_24h is not None else None,
                                       round(price_change_7d, 2) if price_change_7d is not None else None,
                                       round(market_cap, 2) if market_cap is not None else None)
                 else:
@@ -79,7 +78,9 @@ def get_crypto_prices(symbols):
         return {symbol: (None, None, None, None, None) for symbol in symbols}
 
 @app.route('/')
-def index():
+@app.route('/sort/<column>/<order>')
+def index(column=None, order=None):
+
     cryptos = [
         ('assets/btc.png', 'BTC'    , '96.87' ),
         ('assets/eth.png', 'ETH'    , '96.23' ),
@@ -92,15 +93,28 @@ def index():
         ('assets/trx.png', 'TRX'    , '88.20' ),
         ('assets/dot.png', 'DOT'    , '83.80' ),
         ('assets/link.png', 'LINK'  , '87.03' ),
+        ('assets/icp.png', 'ICP'    , '81.78' ),
         ('assets/wemix.png', 'WEMIX', '93.91' ),
         ('assets/matic.png', 'MATIC', '93.27' ),
         ('assets/ton.png', 'TON'    , '92.91' ),
         ('assets/shib.png', 'SHIB'  , '90.81' ),
         ('assets/uni.png', 'UNI'    , '94.28' ),
         ('assets/atom.png', 'ATOM'  , '94.25' ),
+        ('assets/ltc.png', 'LTC'    , '77.24' ),
+        ('assets/bch.png', 'BCH'    , '74.16' ),
         ('assets/leo.png', 'LEO'    , '86.06' ),
         ('assets/inj.png', 'INJ'    , '84.13' ),
+        ('assets/xlm.png', 'XLM'    , '85.97' ),
+        ('assets/near.png', 'NEAR'  , '90.96' ),
+        ('assets/op.png', 'OP'      , '88.60' ),
+        ('assets/okb.png', 'OKB'    , '92.69' ),
         ('assets/apt.png', 'APT'    , '94.28' ),
+        ('assets/tia.png', 'TIA'    , '69.14' ),
+        ('assets/xmr.png', 'XMR'    , '73.35' ),
+        ('assets/ldo.png', 'LDO'    , '91.64' ),
+        ('assets/fil.png', 'FIL'    , '79.86' ),
+        ('assets/arb.png', 'ARB'    , '94.30' ),
+        ('assets/hbar.png', 'HBAR'  , '83.21' ),
         ('assets/imx.png', 'IMX'    , '89.76' ),
         ('assets/sei.png', 'SEI'    , '90.37' ),
         ('assets/rune.png', 'RUNE'  , '89.75' ),
@@ -124,22 +138,52 @@ def index():
         ('assets/sxp.png', 'SXP'    , '91.62' ),
         ('assets/sfund.png', 'SFUND', '90.11' ),
     ]
-
+    
     symbols = [crypto[1] for crypto in cryptos]
     prices = get_crypto_prices(symbols)
 
     updated_cryptos = []
     for crypto in cryptos:
         symbol = crypto[1]
-        price, change_24h, change_1h, change_7d, market_cap = prices.get(symbol, (None, None, None, None, None))
+        price, change_1h, change_24h, change_7d, market_cap = prices.get(symbol, (None, None, None, None, None))
         rate_class = get_class_for_rate(float(crypto[2]))
-        change_24h_class = get_class_for_change(change_24h)
         change_1h_class = get_class_for_change(change_1h)
+        change_24h_class = get_class_for_change(change_24h)
         change_7d_class = get_class_for_change(change_7d)
-        updated_cryptos.append(crypto + (price, change_24h, change_1h, change_7d, market_cap, rate_class, change_24h_class, change_1h_class, change_7d_class))
+        updated_cryptos.append(crypto + (price, change_1h, change_24h, change_7d, int(market_cap/1000000), rate_class, change_24h_class, change_1h_class, change_7d_class))
 
-    cryptos = sorted(updated_cryptos, key=lambda x: x[7] if x[7] is not None else 0, reverse=True)
-    return render_template('index.html', cryptos=cryptos)
+
+    if column and order:
+        reverse_order = True if order == 'desc' else False
+
+        def get_sort_key(crypto, col):
+            """Helper function to get the correct sort key based on column."""
+            column_keys = {
+                'rate': 2, 'price': 3, 'change_1h': 4, 'change_24h': 5,
+                'change_7d': 6, 'market_cap': 7
+            }
+
+
+            # For other columns, sort based on their respective keys
+            key = crypto[column_keys[col]]
+            if key is None:
+                return 0
+            try:
+                return float(key)
+            except ValueError:
+                return key
+
+        cryptos = sorted(updated_cryptos, key=lambda x: get_sort_key(x, column), reverse=reverse_order)
+
+        # Toggle the sorting order for the next click
+        next_order = 'asc' if reverse_order else 'desc'
+
+    else:
+        # Default sorting order for the first click on all columns
+        cryptos = updated_cryptos
+        next_order = 'desc'
+
+    return render_template('index.html', cryptos=cryptos, next_order=next_order)
 
 if __name__ == '__main__':
     app.run(debug=True)
