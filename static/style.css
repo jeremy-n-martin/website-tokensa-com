@@ -1,5 +1,12 @@
 
-table {
+body {
+    max-width: 550px;
+    margin: 0 auto; /* To center the content horizontally within the page */
+}
+
+table 
+
+{
     border: 1px solid #ccc;
 }
 
@@ -12,6 +19,7 @@ td img {
     margin: 0 auto;
 }
 
+.title-column,
 .price-column,
 .cap-column,
 .change_24h-column,
@@ -28,8 +36,10 @@ td img {
 
 .bitcoin-quote {
     font-style: italic;
+    font-size: 16.67px;
     color: #555;
-    padding: 5px;
+    padding: 8px;
+    margin-right: -7px;
     border-left: 5px solid #ff9900;
 }
 

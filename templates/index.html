@@ -13,7 +13,7 @@
     <div class="bitcoin-section">
         <h1>TOKENS <span class="orange-a">A</span> </h1>
     </div>
-    <p class="bitcoin-quote">"Chancellor on brink of second bailout for banks" - The Times, 03/Jan/2009</p>
+    <p class="bitcoin-quote">"Chancellor on brink of second bailout for banks" - Genesis Block, 03/Jan/2009</p>
 
     <table>
         <thead>
@@ -25,11 +25,12 @@
                 <th><button onclick="sortTable('change_1h')">1h %</button></th>
                 <th><button onclick="sortTable('change_24h')">24h %</button></th>
                 <th><button onclick="sortTable('change_7d')">7d %</button></th>
-                <th><button onclick="sortTable('rate')">Crtk </button></th>
+                <th><button onclick="sortTable('rate_ck')">Crtk </button></th>
+                <th><button onclick="sortTable('rate_cb')">Cybr </button></th>
             </tr>
         </thead>
         <tbody>
-            {% for logo, name, rate, price, change_1h, change_24h, change_7d, market_cap, rate_class, change_24h_class, change_1h_class, change_7d_class in cryptos %}
+            {% for logo, name, rate_ck, rate_cb, price, change_1h, change_24h, change_7d, market_cap, rate_ck_class, rate_cb_class, change_24h_class, change_1h_class, change_7d_class in cryptos %}
                 <tr>
                     <td><img src="{{ url_for('static', filename=logo) }}" width="20" height="20" /></td>
                     <td>{{ name }}</td>
@@ -38,10 +39,13 @@
                     <td class="change_1h-column {{ change_1h_class }}">{{ change_1h if change_1h is not none else 'N/A' }}</td>
                     <td class="change_24h-column {{ change_24h_class }}">{{ change_24h if change_24h is not none else 'N/A' }}</td>
                     <td class="change_7d-column {{ change_7d_class }}">{{ change_7d if change_7d is not none else 'N/A' }}</td>
-                    <td class="rate-column {{ rate_class }}">{{ rate }}</td>
+                    <td class="rate-column {{ rate_ck_class }}">{{ rate_ck }}</td>
+                    <td class="rate-column {{ rate_cb_class }}">{{ rate_cb }}</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+    <br>
+    1010111 1101001 1110100 1101000 100000 1101100 1101111 1110110 1100101 🧡
 </body>
 </html>
