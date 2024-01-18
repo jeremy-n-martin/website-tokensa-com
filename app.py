@@ -13,28 +13,26 @@ def get_class_for_rate(rate):
         return 'vhigh'
     elif rate >= 92:
         return 'high'
-    elif rate <= 88:
+    elif rate <= 80:
         return 'vlow'
-    elif rate <= 90:
+    elif rate <= 76:
         return 'low'
     else:
         return 'medium'
 
-def get_class_for_change(change):
+def get_class_for_change(change, scale=1):
     """Determine the CSS class based on change percentage."""
     change =  float(change)
-    if change is None:
-        return 'medium'
-    if change >= 10:
+    if change >= 2*scale:
         return 'vhigh'
-    elif change >= 5:
+    elif change >= scale:
         return 'high'
-    elif change <= -10:
+    elif change <= -2*scale:
         return 'vlow'
-    elif change <= -5:
+    elif change <= -scale:
         return 'low'
     else:
-        return 'medium'
+        return None
 
 def get_crypto_prices(symbols):
     """Get the prices, 24h changes, 1h changes, 7d changes, and market caps of multiple cryptocurrencies."""
@@ -148,9 +146,9 @@ def index(column='market_cap', order='desc'):
         symbol = crypto[1]
         price, change_1h, change_24h, change_7d, market_cap = prices.get(symbol, (None, None, None, None, None))
         rate_class = get_class_for_rate(float(crypto[2]))
-        change_1h_class = get_class_for_change(change_1h)
-        change_24h_class = get_class_for_change(change_24h)
-        change_7d_class = get_class_for_change(change_7d)
+        change_1h_class = get_class_for_change(change_1h, scale=1)
+        change_24h_class = get_class_for_change(change_24h, scale=5)
+        change_7d_class = get_class_for_change(change_7d, scale=10)
         updated_cryptos.append(crypto + (price, change_1h, change_24h, change_7d, market_cap, rate_class, change_24h_class, change_1h_class, change_7d_class))
 
 

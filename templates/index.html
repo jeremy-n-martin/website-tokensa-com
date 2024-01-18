@@ -3,13 +3,6 @@
 <head>
     <title>Cryptocurrencies</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-        .vhigh { background-color: #5ec5c353; }
-        .high { background-color: #89b87044; }
-        .medium { background-color: #ffff0036; }
-        .low { background-color: #8f53532f; }
-        .vlow { background-color: #94478748; }
-    </style>
     <script>
         function sortTable(column) {
             window.location.href = '/sort/' + column + '/' + (window.location.pathname.includes(column + '/desc') ? 'asc' : 'desc');
@@ -32,7 +25,7 @@
                 <th><button onclick="sortTable('change_1h')">1h %</button></th>
                 <th><button onclick="sortTable('change_24h')">24h %</button></th>
                 <th><button onclick="sortTable('change_7d')">7d %</button></th>
-                <th><button onclick="sortTable('rate')">Rate</button></th>
+                <th><button onclick="sortTable('rate')">Crtk </button></th>
             </tr>
         </thead>
         <tbody>
