@@ -1,3 +1,11 @@
+/* Define the cyberpunk font (replace 'CyberpunkFont' with the actual font name or font family) */
+@font-face {
+    font-family: 'CyberpunkFont';
+    src: url('cryptofont.woff') format('woff');
+}
+
+
+
 table {
     border: 1px solid #ccc;
 }
@@ -24,7 +32,23 @@ td img {
 
 
 
+.bitcoin-quote {
+    font-style: italic;
+    color: #555;
+    padding: 5px;
+    border-left: 5px solid #ff9900;
+}
 
+.bitcoin-section {
+    background-color: #f2f2f2;
+    padding: 0px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
 
-
-
+.orange-a {
+    font-size: 40px;
+    font-family: 'CyberpunkFont'; /* Use the cyberpunk font */
+    color: orange; /* Set the color to orange */
+}
