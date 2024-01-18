@@ -33,21 +33,16 @@
             </tr>
         </thead>
         <tbody>
-            {% for logo, name, rate, price, change_24h, change_1h, change_7d, market_cap, rate_class, change_24h_class, change_1h_class, change_7d_class in cryptos %}
+            {% for logo, name, rate, price, change_1h, change_24h, change_7d, market_cap, rate_class, change_24h_class, change_1h_class, change_7d_class in cryptos %}
                 <tr>
                     <td><img src="{{ url_for('static', filename=logo) }}" width="20" height="20" /></td>
                     <td>{{ name }}</td>
                     <td class="market_cap-column">{{ market_cap if market_cap is not none else 'N/A' }} M</td>
-                    <td class="price-column">
-                        {% if price is not none and price is number %}
-                            {{ "%.2f"|format(price) }}
-                        {% else %}
-                            No Price
-                        {% endif %}
-                    </td>                    <td class="change_1h-column {{ change_1h_class }}">{{ change_1h if change_1h is not none else 'N/A' }}</td>
+                    <td class="price-column">{{ price if price is not none else 'No Price' }}</td>                   
+                    <td class="change_1h-column {{ change_1h_class }}">{{ change_1h if change_1h is not none else 'N/A' }}</td>
                     <td class="change_24h-column {{ change_24h_class }}">{{ change_24h if change_24h is not none else 'N/A' }}</td>
                     <td class="change_7d-column {{ change_7d_class }}">{{ change_7d if change_7d is not none else 'N/A' }}</td>
-                    <td class="{{ rate_class }}">{{ rate }}</td>
+                    <td class="rate-column {{ rate_class }}">{{ rate }}</td>
                 </tr>
             {% endfor %}
         </tbody>

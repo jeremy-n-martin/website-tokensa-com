@@ -22,6 +22,7 @@ def get_class_for_rate(rate):
 
 def get_class_for_change(change):
     """Determine the CSS class based on change percentage."""
+    change =  float(change)
     if change is None:
         return 'medium'
     if change >= 10:
@@ -56,16 +57,16 @@ def get_crypto_prices(symbols):
             for symbol in symbols:
                 if symbol in data['data']:
                     quote = data['data'][symbol]['quote']['USD']
-                    price = quote['price']
-                    price_change_1h = quote['percent_change_1h']
-                    price_change_24h = quote['percent_change_24h']
-                    price_change_7d = quote['percent_change_7d']
-                    market_cap = quote['market_cap']
-                    prices[symbol] = (round(price, 2) if price is not None else None, 
-                                      round(price_change_1h, 2) if price_change_1h is not None else None,
-                                      round(price_change_24h, 2) if price_change_24h is not None else None,
-                                      round(price_change_7d, 2) if price_change_7d is not None else None,
-                                      round(market_cap, 2) if market_cap is not None else None)
+                    price = "{:.2f}".format(quote['price']) if quote['price'] is not None else None
+                    price_change_1h = "{:.2f}".format(quote['percent_change_1h']) if quote['percent_change_1h'] is not None else None
+                    price_change_24h = "{:.2f}".format(quote['percent_change_24h']) if quote['percent_change_24h'] is not None else None
+                    price_change_7d = "{:.2f}".format(quote['percent_change_7d']) if quote['percent_change_7d'] is not None else None
+                    market_cap = int(quote['market_cap']/1000000) if quote['market_cap'] is not None else None
+                    prices[symbol] = (price if price is not None else None, 
+                                      price_change_1h if price_change_1h is not None else None,
+                                      price_change_24h if price_change_24h is not None else None,
+                                      price_change_7d if price_change_7d is not None else None,
+                                      market_cap if market_cap is not None else None)
                 else:
                     logging.warning(f"Symbol {symbol} not found in API response")
                     prices[symbol] = (None, None, None, None, None)
@@ -79,7 +80,7 @@ def get_crypto_prices(symbols):
 
 @app.route('/')
 @app.route('/sort/<column>/<order>')
-def index(column=None, order=None):
+def index(column='market_cap', order='desc'):
 
     cryptos = [
         ('assets/btc.png', 'BTC'    , '96.87' ),
@@ -150,7 +151,7 @@ def index(column=None, order=None):
         change_1h_class = get_class_for_change(change_1h)
         change_24h_class = get_class_for_change(change_24h)
         change_7d_class = get_class_for_change(change_7d)
-        updated_cryptos.append(crypto + (price, change_1h, change_24h, change_7d, int(market_cap/1000000), rate_class, change_24h_class, change_1h_class, change_7d_class))
+        updated_cryptos.append(crypto + (price, change_1h, change_24h, change_7d, market_cap, rate_class, change_24h_class, change_1h_class, change_7d_class))
 
 
     if column and order:
@@ -178,10 +179,6 @@ def index(column=None, order=None):
         # Toggle the sorting order for the next click
         next_order = 'asc' if reverse_order else 'desc'
 
-    else:
-        # Default sorting order for the first click on all columns
-        cryptos = updated_cryptos
-        next_order = 'desc'
 
     return render_template('index.html', cryptos=cryptos, next_order=next_order)
 
