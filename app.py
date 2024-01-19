@@ -21,6 +21,7 @@ def get_class_for_rate(rate):
         return 'medium'
 
 def get_class_for_change(change, scale=1):
+    if change is None:return 'medium'
     """Determine the CSS class based on change percentage."""
     change =  float(change)
     if change >= 2*scale:
@@ -281,10 +282,16 @@ def index(column='market_cap', order='desc'):
         ('assets/tao.png', 'TAO', '59', '90', '00'),
         ('assets/cheel.png', 'CHEEL', '89', '92', '53'),
         ('assets/frax.png', 'FRAX', '91', '92', '60'),
-        ('assets/vbnb.png', 'vbnb', '00', '00', '00'),
-
-
-
+        ('assets/vbnb.png', 'VBNB', '00', '00', '00'),
+        ('assets/tao.png', 'TAO', '59', '90', '00'),
+        ('assets/pokt.png', 'POKT', '00', '89', '00'),
+        ('assets/kuji.png', 'KUJI', '79', '74', '00'),
+        ('assets/rlb.png', 'RLB', '00', '00', '00'),
+        ('assets/lyx.png', 'LYX', '00', '00', '00'),
+        ('assets/flex.png', 'FLEX', '88', '75', '00'),
+        ('assets/azero.png', 'AZERO', '73', '92', '00'),
+        ('assets/strd.png', 'STRD', '00', '77', '56'),
+        ('assets/orbr.png', 'ORBR', '48', '77', '37'),
         ('assets/one.png', 'ONE', '77', '92', '00'),
         ('assets/sfund.png', 'SFUND', '90', '50', '50'),
         ('assets/ftn.png', 'FTN', '90', '83', '52'),
@@ -300,10 +307,8 @@ def index(column='market_cap', order='desc'):
         rate_ck_class = get_class_for_rate(float(crypto[2]))
         rate_cb_class = get_class_for_rate(float(crypto[3]))
         rate_ti_class = get_class_for_rate(float(crypto[4]))
-        try:
-            change_1h_class = get_class_for_change(change_1h, scale=1)
-        except:
-            print(crypto)
+
+        change_1h_class = get_class_for_change(change_1h, scale=1)
         change_24h_class = get_class_for_change(change_24h, scale=5)
         change_7d_class = get_class_for_change(change_7d, scale=10)
         updated_cryptos.append(crypto + (price, change_1h, change_24h, change_7d, market_cap,
