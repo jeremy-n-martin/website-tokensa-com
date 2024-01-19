@@ -21,13 +21,13 @@
                 <th></th>
                 <th>Name</th>
                 <th><button onclick="sortTable('market_cap')">M. Cap</button></th>
-                <th><button onclick="sortTable('price')">$ Price</button></th>
-                <th><button onclick="sortTable('change_1h')">1h %</button></th>
-                <th><button onclick="sortTable('change_24h')">24h %</button></th>
-                <th><button onclick="sortTable('change_7d')">7d %</button></th>
-                <th><button onclick="sortTable('rate_ck')">Crtk </button></th>
-                <th><button onclick="sortTable('rate_cb')">Cybr </button></th>
-                <th><button onclick="sortTable('rate_ti')">Toki </button></th>
+                <!-- <th><button onclick="sortTable('price')">$ Price</button></th> -->
+                <th><button onclick="sortTable('change_1h')">H %</button></th>
+                <th><button onclick="sortTable('change_24h')">D %</button></th>
+                <th><button onclick="sortTable('change_7d')">W %</button></th>
+                <th><button onclick="sortTable('rate_ck')">Ck</button></th>
+                <th><button onclick="sortTable('rate_cb')">Cy</button></th>
+                <th><button onclick="sortTable('rate_ti')">Ti</button></th>
             </tr>
         </thead>
         <tbody>
@@ -36,7 +36,7 @@
                     <td><img src="{{ url_for('static', filename=logo) }}" width="20" height="20" /></td>
                     <td>{{ name }}</td>
                     <td class="market_cap-column">{{ market_cap if market_cap is not none else 'N/A' }} M</td>
-                    <td class="price-column">{{ price if price is not none else 'No Price' }}</td>                   
+                    <!-- <td class="price-column">{{ price if price is not none else 'No Price' }}</td> -->                 
                     <td class="change_1h-column {{ change_1h_class }}">{{ change_1h if change_1h is not none else 'N/A' }}</td>
                     <td class="change_24h-column {{ change_24h_class }}">{{ change_24h if change_24h is not none else 'N/A' }}</td>
                     <td class="change_7d-column {{ change_7d_class }}">{{ change_7d if change_7d is not none else 'N/A' }}</td>
