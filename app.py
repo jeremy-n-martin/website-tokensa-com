@@ -21,6 +21,7 @@ def get_class_for_rate(rate):
         return 'medium'
 
 def get_class_for_change(change, scale=1):
+    if change is None:return 'medium'
     """Determine the CSS class based on change percentage."""
     change =  float(change)
     if change >= 2*scale:
@@ -303,10 +304,8 @@ def index(column='market_cap', order='desc'):
         rate_ck_class = get_class_for_rate(float(crypto[2]))
         rate_cb_class = get_class_for_rate(float(crypto[3]))
         rate_ti_class = get_class_for_rate(float(crypto[4]))
-        try:
-            change_1h_class = get_class_for_change(change_1h, scale=1)
-        except:
-            print(crypto)
+
+        change_1h_class = get_class_for_change(change_1h, scale=1)
         change_24h_class = get_class_for_change(change_24h, scale=5)
         change_7d_class = get_class_for_change(change_7d, scale=10)
         updated_cryptos.append(crypto + (price, change_1h, change_24h, change_7d, market_cap,
