@@ -2,8 +2,15 @@
 body {
     max-width: 560px;
     margin: 0 auto; /* To center the content horizontally within the page */
-    font-family: "Times New Roman", monospace;
+    font-family: monospace;
     font-size: 16px;
+}
+
+table {
+    min-width: 560px; /* La largeur minimale du tableau est de 420px */
+    max-width: 560px; /* La largeur maximale du tableau, si vous souhaitez la limiter */
+    border-collapse: collapse;
+    margin: auto; /* Centrage vertical si nécessaire */
 }
 
 button {
@@ -50,19 +57,23 @@ td img {
     font-weight: "bold";
 }
 
-
-
-
 .bitcoin-quote {
     font-style: italic;
-    font-size: 16.67px;
+    font-size: 12.75px;
     color: #555;
     padding: 8px;
-    margin-right: -7px;
+    margin-right: -8px;
     border-left: 5px solid #ff9900;
 }
 
-.bitcoin-section {
+.love-quote {
+    font-style: italic;
+    font-size: 13.8px;
+    margin-right: -8px;
+    color: #555;
+}
+
+.title-panel {
     background-color: #f2f2f2;
     padding: 0px;
     border-radius: 10px;
@@ -75,19 +86,26 @@ td img {
     color: orange; /* Set the color to orange */
 }
 
-
-
 .vhigh {
     color: #00b058;
 }
+
 .high {
     color: hsl(78, 100%, 36%);
 }
+
 .medium {
 }
+
 .low {
     color: #e47e0a;
 }
 .vlow {
     color: #ff0000;
+}
+
+@media screen and (max-width: 420px) {
+    .table-container {
+        overflow-x: auto; /* Rend le tableau défilable horizontalement sur des écrans plus petits */
+    }
 }

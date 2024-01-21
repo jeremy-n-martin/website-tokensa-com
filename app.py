@@ -274,9 +274,8 @@ def index(column='market_cap', order='desc'):
         ('assets/prime.png', 'PRIME', '70', '92', '00'),
         ('assets/ont.png', 'ONT', '79', '92', '00'),
         ('assets/fnsa.png', 'FNSA', '89', '83', '00'),
-        ('assets/sxp.png', 'SXP', '91', '50', '50'),
+        ('assets/sxp.png', 'SXP', '91', '00', '00'),
         ('assets/waxp.png', 'WAXP', '81', '91', '00'),
-        ('assets/brit.png', 'BRIT', '48', '62', '00'),
         ('assets/hex.png', 'HEX', '00', '00', '00'),
         ('assets/tao.png', 'TAO', '59', '90', '00'),
         ('assets/cheel.png', 'CHEEL', '89', '92', '53'),
@@ -290,7 +289,7 @@ def index(column='market_cap', order='desc'):
         ('assets/strd.png', 'STRD', '00', '77', '56'),
         ('assets/orbr.png', 'ORBR', '48', '77', '37'),
         ('assets/one.png', 'ONE', '77', '92', '00'),
-        ('assets/sfund.png', 'SFUND', '90', '50', '50'),
+        ('assets/sfund.png', 'SFUND', '90', '00', '00'),
         ('assets/ftn.png', 'FTN', '90', '83', '52'),
     ]
     

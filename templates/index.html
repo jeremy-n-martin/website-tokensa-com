@@ -8,13 +8,13 @@
             window.location.href = '/sort/' + column + '/' + (window.location.pathname.includes(column + '/desc') ? 'asc' : 'desc');
         }
     </script>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 <body>
-    <div class="bitcoin-section">
+    <div class="title-panel">
         <h1>TOKENS <span class="orange-a">A</span> </h1>
     </div>
     <p class="bitcoin-quote">"Chancellor on brink of second bailout for banks" - Genesis Block, 03/Jan/2009</p>
-
     <table>
         <thead>
             <tr>
@@ -47,7 +47,8 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <p class="love-quote">1010111 1101001 1110100 1101000 100000 1101100 1101111 1110110 1100101 🧡</p>
     <br>
-    1010111 1101001 1110100 1101000 100000 1101100 1101111 1110110 1100101 🧡
 </body>
 </html>
