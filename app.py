@@ -5,21 +5,36 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-def get_class_for_rate(rate):
+def get_class_for_rate_ck(rate):
     """Determine the CSS class based on rate value."""
-    if rate is None:
-        return 'medium'
-    if rate >= 94:
-        return 'vhigh'
-    elif rate >= 92:
-        return 'high'
-    elif rate <= 80:
-        return 'vlow'
-    elif rate <= 76:
-        return 'low'
-    else:
-        return 'medium'
+    if rate is None: return 'medium'
+    if rate is 00 :return 'low'
+    if rate >= 93: return 'vhigh'
+    elif rate >= 91: return 'high'
+    elif rate <= 76: return 'vlow'
+    elif rate <= 80: return 'low'
+    else: return 'medium'
 
+def get_class_for_rate_cb(rate):
+    """Determine the CSS class based on rate value."""
+    if rate is None: return 'medium'
+    if rate is 00 :return 'low'
+    if rate >= 97: return 'vhigh'
+    elif rate >= 93: return 'high'
+    elif rate <= 85: return 'vlow'
+    elif rate <= 89: return 'low'
+    else: return 'medium'
+
+def get_class_for_rate_ti(rate):
+    """Determine the CSS class based on rate value."""
+    if rate is None:return 'medium'
+    if rate is 00 :return 'low'
+    if rate >= 69: return 'vhigh'
+    elif rate >= 64: return 'high'
+    elif rate <= 54: return 'vlow'
+    elif rate <= 59: return 'low'
+    else: return 'medium'
+    
 def get_class_for_change(change, scale=1):
     if change is None:return 'medium'
     """Determine the CSS class based on change percentage."""
@@ -300,9 +315,9 @@ def index(column='market_cap', order='desc'):
     for crypto in cryptos:
         symbol = crypto[1]
         market_cap, price, change_1h, change_24h, change_7d = prices.get(symbol, (None, None, None, None, None))
-        rate_ck_class = get_class_for_rate(float(crypto[2]))
-        rate_cb_class = get_class_for_rate(float(crypto[3]))
-        rate_ti_class = get_class_for_rate(float(crypto[4]))
+        rate_ck_class = get_class_for_rate_ck(float(crypto[2]))
+        rate_cb_class = get_class_for_rate_cb(float(crypto[3]))
+        rate_ti_class = get_class_for_rate_ti(float(crypto[4]))
 
         change_1h_class = get_class_for_change(change_1h, scale=1)
         change_24h_class = get_class_for_change(change_24h, scale=5)

@@ -7,8 +7,8 @@ body {
 }
 
 table {
-    min-width: 560px; /* La largeur minimale du tableau est de 420px */
-    max-width: 560px; /* La largeur maximale du tableau, si vous souhaitez la limiter */
+    min-width: 480px; /* La largeur minimale du tableau */
+    max-width: 560px; /* La largeur maximale du tableau */
     border-collapse: collapse;
     margin: auto; /* Centrage vertical si nécessaire */
 }
@@ -31,9 +31,15 @@ button:hover {
 }
 
 table 
-
 {
     border: 1px solid #ccc;
+}
+
+thead th {
+    position: sticky;
+    top: -2px;
+    background-color: white; /* ou toute autre couleur de fond souhaitée */
+    z-index: 10; /* pour s'assurer que l'en-tête reste au-dessus du contenu lors du défilement */
 }
 
 th, td {
@@ -84,6 +90,8 @@ td img {
 .orange-a {
     font-size: 40px;
     color: orange; /* Set the color to orange */
+    transition: color 2s ease-in-out;
+
 }
 
 .vhigh {
@@ -93,16 +101,36 @@ td img {
 .high {
     color: hsl(78, 100%, 36%);
 }
-
 .medium {
 }
-
 .low {
     color: #e47e0a;
 }
 .vlow {
     color: #ff0000;
 }
+
+
+#myBtn {
+    display: none; /* Bouton caché par défaut */
+    position: fixed; /* Position fixée */
+    bottom: 20px; /* Positionnement en bas de la page */
+    right: 30px; /* Positionnement à droite */
+    z-index: 99; /* S'assure qu'il est au-dessus d'autres éléments */
+    border: none; /* Pas de bordure */
+    outline: none; /* Pas de contour */
+    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent noir */
+    color: white; /* Texte blanc */
+    cursor: pointer; /* Change le curseur en main */
+    padding: 15px; /* Espace interne */
+    border-radius: 10px; /* Bords arrondis */
+}
+
+#myBtn:hover {
+    background-color: #555; /* Couleur de fond au survol */
+}
+
+
 
 @media screen and (max-width: 420px) {
     .table-container {
