@@ -7,8 +7,8 @@ app = Flask(__name__)
 
 def get_class_for_rate_ck(rate):
     """Determine the CSS class based on rate value."""
-    if rate is None: return 'medium'
-    if rate is 00 :return 'low'
+    if rate == None: return 'medium'
+    if rate == 00 :return 'low'
     if rate >= 93: return 'vhigh'
     elif rate >= 91: return 'high'
     elif rate <= 76: return 'vlow'
@@ -17,8 +17,8 @@ def get_class_for_rate_ck(rate):
 
 def get_class_for_rate_cb(rate):
     """Determine the CSS class based on rate value."""
-    if rate is None: return 'medium'
-    if rate is 00 :return 'low'
+    if rate == None: return 'medium'
+    if rate == 00 :return 'low'
     if rate >= 97: return 'vhigh'
     elif rate >= 93: return 'high'
     elif rate <= 85: return 'vlow'
@@ -27,8 +27,8 @@ def get_class_for_rate_cb(rate):
 
 def get_class_for_rate_ti(rate):
     """Determine the CSS class based on rate value."""
-    if rate is None:return 'medium'
-    if rate is 00 :return 'low'
+    if rate == None:return 'medium'
+    if rate == 00 :return 'low'
     if rate >= 69: return 'vhigh'
     elif rate >= 64: return 'high'
     elif rate <= 54: return 'vlow'
@@ -51,6 +51,7 @@ def get_class_for_change(change, scale=1):
         return None
 
 def get_crypto_prices(symbols):
+    
     """Get the prices, 24h changes, 1h changes, 7d changes, and market caps of multiple cryptocurrencies."""
     api_key = os.getenv("COINMARKETCAP_API_KEY")
     url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
@@ -96,6 +97,8 @@ def get_crypto_prices(symbols):
 @app.route('/sort/<column>/<order>')
 def index(column='market_cap', order='desc'):
 
+    print("a")
+
     #rajouter une colonne avec les cotes binance etc
     #rajouter une colonne avec les layer etc
     #rajouter une colonne avec les dates de création etc
@@ -112,9 +115,9 @@ def index(column='market_cap', order='desc'):
         ('assets/trx.png', 'TRX', '88', '90', '61'),
         ('assets/link.png', 'LINK', '87', '94', '00'),
         ('assets/dot.png', 'DOT', '83', '96', '70'),
-        ('assets/ton.png', 'TON', '92', '96', '63'),
+        ('assets/ton.png', 'TON', '93', '96', '63'),
         ('assets/matic.png', 'MATIC', '93', '96', '70'),
-        ('assets/shib.png', 'SHIB', '90', '92', '00'),
+        ('assets/shib.png', 'SHIB', '91', '92', '00'),
         ('assets/ltc.png', 'LTC', '77', '88', '56'),
         ('assets/icp.png', 'ICP', '81', '97', '00'),
         ('assets/bch.png', 'BCH', '74', '88', '53'),
@@ -185,7 +188,7 @@ def index(column='market_cap', order='desc'):
         ('assets/cfx.png', 'CFX', '71', '89', '59'),
         ('assets/xdc.png', 'XDC', '52', '00', '51'),
         ('assets/rose.png', 'ROSE', '79', '91', '00'),
-        ('assets/cake.png', 'CAKE', '93', '93', '00'),
+        ('assets/cake.png', 'CAKE', '94', '93', '00'),
         ('assets/fxs.png', 'FXS', '81', '94', '00'),
         ('assets/gala.png', 'GALA', '94', '84', '58'),
         ('assets/xec.png', 'XEC', '71', '90', '00'),
@@ -202,7 +205,7 @@ def index(column='market_cap', order='desc'):
         ('assets/fet.png', 'FET', '91', '77', '54'),
         ('assets/pendle.png', 'PENDLE', '81', '83', '65'),
         ('assets/cspr.png', 'CSPR', '80', '92', '00'),
-        ('assets/ape.png', 'APE', '92', '92', '60'),
+        ('assets/ape.png', 'APE', '93', '92', '60'),
         ('assets/axl.png', 'AXL', '92', '84', '54'),
         ('assets/nexo.png', 'NEXO', '77', '92', '00'),
         ('assets/gt.png', 'GT', '87', '76', '00'),
@@ -212,7 +215,7 @@ def index(column='market_cap', order='desc'):
         ('assets/1inch.png', '1INCH', '93', '92', '00'),
         ('assets/xrd.png', 'XRD', '73', '92', '00'),
         ('assets/uma.png', 'UMA', '73', '92', '00'),
-        ('assets/twt.png', 'TWT', '92', '92', '68'),
+        ('assets/twt.png', 'TWT', '93', '92', '68'),
         ('assets/comp.png', 'COMP', '86', '50', '50'),
         ('assets/core.png', 'CORE', '90', '83', '00'),
         ('assets/gmx.png', 'GMX', '91', '90', '64'),
@@ -249,7 +252,7 @@ def index(column='market_cap', order='desc'):
         ('assets/glmr.png', 'GLMR', '80', '92', '00'),
         ('assets/ssv.png', 'SSV', '69', '92', '54'),
         ('assets/super.png', 'SUPER', '82', '92', '00'),
-        ('assets/sfp.png', 'SFP', '89', '85', '50'),
+        ('assets/sfp.png', 'SFP', '91', '85', '50'),
         ('assets/tfuel.png', 'TFUEL', '72', '91', '00'),
         ('assets/ray.png', 'RAY', '72', '00', '00'),
         ('assets/t.png', 'T', '85', '85', '00'),
@@ -286,7 +289,6 @@ def index(column='market_cap', order='desc'):
         ('assets/band.png', 'BAND', '88', '90', '60'),
         ('assets/meme.png', 'MEME', '89', '87', '00'),
         ('assets/movr.png', 'MOVR', '70', '80', '00'),
-        ('assets/prime.png', 'PRIME', '70', '92', '00'),
         ('assets/ont.png', 'ONT', '79', '92', '00'),
         ('assets/fnsa.png', 'FNSA', '89', '83', '00'),
         ('assets/sxp.png', 'SXP', '91', '00', '00'),
@@ -304,8 +306,10 @@ def index(column='market_cap', order='desc'):
         ('assets/strd.png', 'STRD', '00', '77', '56'),
         ('assets/orbr.png', 'ORBR', '48', '77', '37'),
         ('assets/one.png', 'ONE', '77', '92', '00'),
-        ('assets/sfund.png', 'SFUND', '90', '00', '00'),
         ('assets/ftn.png', 'FTN', '90', '83', '52'),
+        ('assets/prime.png', 'PRIME', '70', '92', '00'),
+        ('assets/ctsi.png', 'CTSI', '92', '92', '53'),
+        ('assets/sfund.png', 'SFUND', '90', '00', '00'),
     ]
     
     symbols = [crypto[1] for crypto in cryptos]

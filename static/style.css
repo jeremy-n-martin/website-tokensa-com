@@ -58,7 +58,8 @@ td img {
 .change_1h-column,
 .change_7d-column,
 .rate-column,
-.market_cap-column {
+.market_cap-column,
+.marketplace-column {
     text-align: right;
     font-weight: "bold";
 }
