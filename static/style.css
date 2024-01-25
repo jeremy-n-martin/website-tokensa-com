@@ -7,7 +7,7 @@ body {
 }
 
 table {
-    min-width: 480px; /* La largeur minimale du tableau */
+    min-width: 560px; /* La largeur minimale du tableau */
     max-width: 560px; /* La largeur maximale du tableau */
     border-collapse: collapse;
     margin: auto; /* Centrage vertical si nécessaire */
