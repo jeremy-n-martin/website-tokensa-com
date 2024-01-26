@@ -220,7 +220,6 @@ def index(column='market_cap', order='desc'):
         ('assets/core.png', 'CORE', '90', '83', '00'),
         ('assets/gmx.png', 'GMX', '91', '90', '64'),
         ('assets/gas.png', 'GAS', '60', '92', '00'),
-        ('assets/paxg.png', 'PAXG', '93', '92', '00'),
         ('assets/nft.png', 'NFT', '61', '78', '49'),
         ('assets/xem.png', 'XEM', '61', '00', '00'),
         ('assets/luna.png', 'LUNA', '59', '92', '00'),
