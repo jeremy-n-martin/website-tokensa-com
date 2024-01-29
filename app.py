@@ -53,7 +53,6 @@ def get_class_for_change(change, scale=1):
 def get_crypto_prices(symbols):
     
     """Get the prices, 24h changes, 1h changes, 7d changes, and market caps of multiple cryptocurrencies."""
-    api_key = os.getenv("COINMARKETCAP_API_KEY")
     url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
     parameters = {
         'symbol': ','.join(symbols),
@@ -61,7 +60,7 @@ def get_crypto_prices(symbols):
     }
     headers = {
         'Accepts': 'application/json',
-        'X-CMC_PRO_API_KEY': api_key,
+        'X-CMC_PRO_API_KEY': os.getenv("COINMARKETCAP_API_KEY"),
     }
 
     try:
@@ -92,19 +91,45 @@ def get_crypto_prices(symbols):
     except requests.exceptions.RequestException as e:
         logging.error(f"API request exception: {e}")
         return {symbol: (None, None, None, None, None) for symbol in symbols}
+        
+
+def get_ti_prices():
+    url = "https://api.tokeninsight.com/api/v1/rating/coins"
+
+    headers = {
+        "accept": "application/json",
+        "TI_API_KEY": os.getenv("TOKENINSIGHT_API_KEY"),
+    }
+
+    response = requests.get(url, headers=headers)
+
+    # Check if the request was successful
+    if response.status_code == 200:
+        # Parse the JSON data directly from the response
+        data = response.json()
+
+        # Extract the list of items (cryptocurrencies)
+        items = data["data"]["items"]
+
+        # Extract the symbol and rating_score for each item
+        crypto_info = [(item["symbol"], item["rating_score"]) for item in items]
+
+        return crypto_info
+    else:
+        print(f"Failed to fetch data from token insigh API: {response.status_code}")
+        exit
+
 
 @app.route('/')
 @app.route('/sort/<column>/<order>')
 def index(column='market_cap', order='desc'):
-
-    print("a")
 
     #rajouter une colonne avec les cotes binance etc
     #rajouter une colonne avec les layer etc
     #rajouter une colonne avec les dates de création etc
     #rajouter une colonne liquidity Volume/Market cap (24h)
     cryptos = [
-        ('assets/btc.png', 'BTC', '96', '95', '00'),
+        ('assets/btc.png', 'BTC', '96', '95', '78'),
         ('assets/eth.png', 'ETH', '96', '96', '82'),
         ('assets/bnb.png', 'BNB', '92', '93', '77'),
         ('assets/sol.png', 'SOL', '91', '97', '62'),
@@ -112,8 +137,8 @@ def index(column='market_cap', order='desc'):
         ('assets/ada.png', 'ADA', '89', '95', '65'),
         ('assets/avax.png', 'AVAX', '94', '97', '71'),
         ('assets/doge.png', 'DOGE', '86', '97', '00'),
-        ('assets/trx.png', 'TRX', '88', '90', '61'),
-        ('assets/link.png', 'LINK', '87', '94', '00'),
+        ('assets/trx.png', 'TRX', '88', '90', '62'),
+        ('assets/link.png', 'LINK', '87', '94', '75'),
         ('assets/dot.png', 'DOT', '83', '96', '70'),
         ('assets/ton.png', 'TON', '93', '96', '63'),
         ('assets/matic.png', 'MATIC', '93', '96', '70'),
@@ -127,25 +152,25 @@ def index(column='market_cap', order='desc'):
         ('assets/etc.png', 'ETC', '77', '88', '57'),
         ('assets/xlm.png', 'XLM', '85', '89', '63'),
         ('assets/okb.png', 'OKB', '92', '97', '67'),
-        ('assets/inj.png', 'INJ', '84', '97', '00'),
+        ('assets/inj.png', 'INJ', '84', '97', '68'),
         ('assets/op.png', 'OP', '88', '94', '62'),
         ('assets/near.png', 'NEAR', '90', '88', '70'),
         ('assets/apt.png', 'APT', '94', '97', '63'),
         ('assets/tia.png', 'TIA', '69', '97', '57'),
         ('assets/xmr.png', 'XMR', '73', '88', '63'),
-        ('assets/ldo.png', 'LDO', '91', '96', '00'),
+        ('assets/ldo.png', 'LDO', '91', '96', '71'),
         ('assets/fil.png', 'FIL', '79', '89', '67'),
         ('assets/hbar.png', 'HBAR', '83', '90', '66'),
-        ('assets/imx.png', 'IMX', '89', '95', '00'),
+        ('assets/imx.png', 'IMX', '89', '95', '64'),
         ('assets/arb.png', 'ARB', '94', '89', '57'),
         ('assets/kas.png', 'KAS', '00', '00', '00'),
         ('assets/mnt.png', 'MNT', '81', '93', '00'),
         ('assets/stx.png', 'STX', '78', '88', '76'),
         ('assets/cro.png', 'CRO', '92', '88', '63'),
         ('assets/vet.png', 'VET', '92', '97', '64'),
-        ('assets/mkr.png', 'MKR', '91', '90', '00'),
-        ('assets/sei.png', 'SEI', '90', '96', '00'),
-        ('assets/rndr.png', 'RNDR', '59', '97', '49'),
+        ('assets/mkr.png', 'MKR', '91', '90', '68'),
+        ('assets/sei.png', 'SEI', '90', '96', '57'),
+        ('assets/rndr.png', 'RNDR', '59', '97', '60'),
         ('assets/ordi.png', 'ORDI', '52', '00', '00'),
         ('assets/bsv.png', 'BSV', '70', '00', '00'),
         ('assets/grt.png', 'GRT', '00', '97', '68'),
@@ -204,7 +229,7 @@ def index(column='market_cap', order='desc'):
         ('assets/gno.png', 'GNO', '77', '87', '00'),
         ('assets/fet.png', 'FET', '91', '77', '54'),
         ('assets/pendle.png', 'PENDLE', '81', '83', '65'),
-        ('assets/cspr.png', 'CSPR', '80', '92', '00'),
+        ('assets/cspr.png', 'CSPR', '80', '92', '59'),
         ('assets/ape.png', 'APE', '93', '92', '60'),
         ('assets/axl.png', 'AXL', '92', '84', '54'),
         ('assets/nexo.png', 'NEXO', '77', '92', '00'),
@@ -228,7 +253,7 @@ def index(column='market_cap', order='desc'):
         ('assets/btg.png', 'BTG', '46', '00', '00'),
         ('assets/skl.png', 'SKL', '85', '92', '00'),
         ('assets/enj.png', 'ENJ', '92', '92', '65'),
-        ('assets/iotx.png', 'IOTX', '92', '92', '00'),
+        ('assets/iotx.png', 'IOTX', '92', '92', '67'),
         ('assets/zec.png', 'ZEC', '73', '82', '00'),
         ('assets/zil.png', 'ZIL', '80', '92', '00'),
         ('assets/wif.png', 'WIF', '00', '00', '00'),
@@ -264,7 +289,7 @@ def index(column='market_cap', order='desc'):
         ('assets/mx.png', 'MX', '77', '85', '55'),
         ('assets/cvx.png', 'CVX', '86', '85', '53'),
         ('assets/cfg.png', 'CFG', '81', '00', '00'),
-        ('assets/zrx.png', 'ZRX', '83', '00', '00'),
+        ('assets/zrx.png', 'ZRX', '83', '00', '70'),
         ('assets/waves.png', 'WAVES', '73', '83', '00'),
         ('assets/jst.png', 'JST', '75', '00', '00'),
         ('assets/rbn.png', 'RBN', '70', '89', '00'),
@@ -310,6 +335,19 @@ def index(column='market_cap', order='desc'):
         ('assets/ctsi.png', 'CTSI', '92', '92', '53'),
         ('assets/sfund.png', 'SFUND', '90', '00', '00'),
     ]
+
+    # the token insight prices maj
+    prices = get_ti_prices()
+    for symbol, score in prices:
+        updated_cryptos = []
+        for item in cryptos:
+            if item[1] == symbol:
+                score = round(float(score))
+                new_item = item[:4] + (score,)
+            else:
+                new_item = item
+            updated_cryptos.append(new_item)
+        cryptos = updated_cryptos
     
     symbols = [crypto[1] for crypto in cryptos]
     prices = get_crypto_prices(symbols)
