@@ -57,10 +57,12 @@
                 <th><button onclick="sortTable('rate_ck')">Ck</button></th>
                 <th><button onclick="sortTable('rate_cb')">Cy</button></th>
                 <th><button onclick="sortTable('rate_ti')">Ti</button></th>
+                <th><button onclick="sortTable('rate_co')">Co</button></th>
             </tr>
         </thead>
         <tbody>
-            {% for logo, name, rate_ck, rate_cb, rate_ti, price, change_1h, change_24h, change_7d, market_cap, rate_ck_class, rate_cb_class, rate_ti_class, change_24h_class, change_1h_class, change_7d_class in cryptos %}
+            {% for logo, name, rate_ck, rate_cb, rate_ti, price, change_1h, change_24h, change_7d, market_cap, rate_co, rate_ck_class,
+                rate_cb_class, rate_ti_class, change_24h_class, change_1h_class, change_7d_class, rate_co_class in cryptos %}
                 <tr>
                     <td><img src="{{ url_for('static', filename=logo) }}" width="20" height="20" /></td>
                     <td>{{ name }}</td>
@@ -72,6 +74,7 @@
                     <td class="rate-column {{ rate_ck_class }}">{{ rate_ck }}</td>
                     <td class="rate-column {{ rate_cb_class }}">{{ rate_cb }}</td>
                     <td class="rate-column {{ rate_ti_class }}">{{ rate_ti }}</td>
+                    <td class="rate-column {{ rate_co_class }}">{{ rate_co }}</td>
                 </tr>
             {% endfor %}
         </tbody>

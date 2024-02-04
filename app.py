@@ -1,9 +1,13 @@
+from flask import Flask, render_template, request
+from flask_caching import Cache
 import requests
 import os
 import logging
-from flask import Flask, render_template, request
 
 app = Flask(__name__)
+
+# Configure cache
+cache = Cache(app, config={'CACHE_TYPE': 'SimpleCache'})
 
 def get_class_for_rate_ck(rate):
     """Determine the CSS class based on rate value."""
@@ -33,6 +37,16 @@ def get_class_for_rate_ti(rate):
     elif rate >= 64: return 'high'
     elif rate <= 54: return 'vlow'
     elif rate <= 59: return 'low'
+    else: return 'medium'
+
+def get_class_for_rate_co(rate):
+    """Determine the CSS class based on rate value."""
+    if rate == None: return 'medium'
+    if rate == 00 :return 'low'
+    if rate >= 90: return 'vhigh'
+    elif rate >= 82: return 'high'
+    elif rate <= 50: return 'vlow'
+    elif rate <= 58: return 'low'
     else: return 'medium'
     
 def get_class_for_change(change, scale=1):
@@ -359,13 +373,16 @@ def index(column='market_cap', order='desc'):
         rate_ck_class = get_class_for_rate_ck(float(crypto[2]))
         rate_cb_class = get_class_for_rate_cb(float(crypto[3]))
         rate_ti_class = get_class_for_rate_ti(float(crypto[4]))
+        rate_consolided = (float(crypto[2]) + 0.9*float(crypto[3]) + 1.1*float(crypto[4]))/3
+        rate_co_class = get_class_for_rate_co(float(rate_consolided))
+        rate_co = str(round(rate_consolided))
 
         change_1h_class = get_class_for_change(change_1h, scale=1)
         change_24h_class = get_class_for_change(change_24h, scale=5)
         change_7d_class = get_class_for_change(change_7d, scale=10)
-        updated_cryptos.append(crypto + (price, change_1h, change_24h, change_7d, market_cap,
+        updated_cryptos.append(crypto + (price, change_1h, change_24h, change_7d, market_cap, rate_co,
                                          rate_ck_class, rate_cb_class, rate_ti_class, change_24h_class,
-                                         change_1h_class, change_7d_class))
+                                         change_1h_class, change_7d_class, rate_co_class))
 
 
     if column and order:
@@ -375,7 +392,7 @@ def index(column='market_cap', order='desc'):
             """Helper function to get the correct sort key based on column."""
             column_keys = {
                 'rate_ck': 2, 'rate_cb': 3, 'rate_ti': 4, 'price': 5, 'change_1h': 6,
-                'change_24h': 7, 'change_7d': 8, 'market_cap': 9
+                'change_24h': 7, 'change_7d': 8, 'market_cap': 9, 'rate_co' : 10,
             }
 
 

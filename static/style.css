@@ -66,17 +66,15 @@ td img {
 
 .bitcoin-quote {
     font-style: italic;
-    font-size: 12.75px;
+    font-size: 12.25px;
     color: #555;
     padding: 8px;
-    margin-right: -8px;
     border-left: 5px solid #ff9900;
 }
 
 .love-quote {
     font-style: italic;
-    font-size: 13.8px;
-    margin-right: -8px;
+    font-size: 13.3px;
     color: #555;
 }
 
