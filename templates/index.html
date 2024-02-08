@@ -49,6 +49,7 @@
             <tr>
                 <th></th>
                 <th>Name</th>
+                <th><button onclick="sortTable('creation_time')">Date</button></th>
                 <th><button onclick="sortTable('market_cap')">M. Cap</button></th>
                 <!-- <th><button onclick="sortTable('price')">$ Price</button></th> -->
                 <th><button onclick="sortTable('change_1h')">H %</button></th>
@@ -63,11 +64,12 @@
             </tr>
         </thead>
         <tbody>
-            {% for logo, name, rate_ck, rate_cb, rate_ti, price, change_1h, change_24h, change_7d, market_cap, rate_co, rate_ck_class,
+            {% for logo, name, creation_time, rate_ck, rate_cb, rate_ti, price, change_1h, change_24h, change_7d, market_cap, rate_co, rate_ck_class,
                 rate_cb_class, rate_ti_class, change_24h_class, change_1h_class, change_7d_class, rate_co_class in cryptos %}
                 <tr>
                     <td><img src="{{ url_for('static', filename=logo) }}" width="20" height="20" /></td>
                     <td>{{ name }}</td>
+                    <td class="creation_time-column">{{creation_time}}</td>
                     <td class="market_cap-column">{{ market_cap if market_cap is not none else 'N/A' }} M</td>
                     <!-- <td class="price-column">{{ price if price is not none else 'No Price' }}</td> -->                 
                     <td class="change_1h-column {{ change_1h_class }}">{{ change_1h if change_1h is not none else 'N/A' }}</td>
