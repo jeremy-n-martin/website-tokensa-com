@@ -64,6 +64,7 @@ def get_class_for_change(change, scale=1):
     else:
         return None
 
+@cache.memoize(timeout=60)
 def get_crypto_prices(symbols):
     
     """Get the prices, 24h changes, 1h changes, 7d changes, and market caps of multiple cryptocurrencies."""
@@ -106,7 +107,7 @@ def get_crypto_prices(symbols):
         logging.error(f"API request exception: {e}")
         return {symbol: (None, None, None, None, None) for symbol in symbols}
         
-
+@cache.memoize(timeout=1000)
 def get_ti_prices():
     url = "https://api.tokeninsight.com/api/v1/rating/coins"
 
