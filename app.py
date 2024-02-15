@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from flask_caching import Cache
 import requests
 import os
@@ -8,6 +8,15 @@ app = Flask(__name__)
 
 # Configure cache
 cache = Cache(app, config={'CACHE_TYPE': 'SimpleCache'})
+
+# Force HTTPS
+@app.before_request
+def before_request():
+    if 'DYNO' in os.environ:  # Vérifie si l'application s'exécute sur Heroku en production
+        if request.headers.get('X-Forwarded-Proto', 'http') == 'http':
+            url = request.url.replace('http://', 'https://', 1)
+            code = 301
+            return redirect(url, code=code)
 
 def get_class_for_rate_ck(rate):
     """Determine the CSS class based on rate value."""
