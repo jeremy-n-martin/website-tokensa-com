@@ -32,10 +32,10 @@ def get_class_for_rate_cb(rate):
     """Determine the CSS class based on rate value."""
     if rate == None: return 'medium'
     if rate == 00 :return 'low'
-    if rate >= 97: return 'vhigh'
-    elif rate >= 93: return 'high'
-    elif rate <= 85: return 'vlow'
-    elif rate <= 89: return 'low'
+    if rate >= 88: return 'vhigh'
+    elif rate >= 85: return 'high'
+    elif rate <= 70: return 'vlow'
+    elif rate <= 80: return 'low'
     else: return 'medium'
 
 def get_class_for_rate_ti(rate):
@@ -163,7 +163,7 @@ def index(column='market_cap', order='desc'):
         ('assets/doge.png', 'DOGE', '2013', '86', '88', '00'),
         ('assets/trx.png', 'TRX', '2018', '87', '88', '62'),
         ('assets/dot.png', 'DOT', '2020', '84', '88', '70'),
-        ('assets/matic.png', 'MATIC', '2017', '88', '96', '70'),
+        ('assets/matic.png', 'MATIC', '2017', '92', '88', '70'),
         ('assets/ton.png', 'TON', '2022', '92', '88', '63'),
         ('assets/icp.png', 'ICP', '2021', '79', '88', '00'),
         ('assets/shib.png', 'SHIB', '2020', '91', '88', '00'),
