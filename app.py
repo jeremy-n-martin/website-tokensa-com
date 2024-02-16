@@ -238,7 +238,7 @@ def index(column='market_cap', order='desc'):
         ('assets/rose.png', 'ROSE', '2020', '79', '84', '00'),
         ('assets/cake.png', 'CAKE', '2020', '94', '88', '00'),
         ('assets/fxs.png', 'FXS', '2020', '81', '88', '00'),
-        ('assets/gala.png', 'GALA', '2020', '94', '84', '58'),
+        ('assets/gala.png', 'GALA', '2020', '95', '84', '58'),
         ('assets/xec.png', 'XEC', '2021', '71', '88', '00'),
         ('assets/ar.png', 'AR', '2018', '69', '88', '00'),
         ('assets/lunc.png', 'LUNC', '2022', '49', '00', '00'),
