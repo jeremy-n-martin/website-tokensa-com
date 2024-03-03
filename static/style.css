@@ -65,6 +65,12 @@ td img {
     font-weight: "bold";
 }
 
+.market_cap-column {
+    text-align: right;
+    font-weight: "bold";
+    font-size: 14px;
+}
+
 .bitcoin-quote {
     font-style: italic;
     font-size: 11px;

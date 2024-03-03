@@ -3,6 +3,8 @@ from flask_caching import Cache
 import requests
 import os
 import logging
+from dotenv import load_dotenv
+load_dotenv() 
 
 app = Flask(__name__)
 
@@ -75,7 +77,6 @@ def get_class_for_change(change, scale=1):
 
 @cache.memoize(timeout=60)
 def get_crypto_prices(symbols):
-    
     """Get the prices, 24h changes, 1h changes, 7d changes, and market caps of multiple cryptocurrencies."""
     url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
     parameters = {
@@ -89,6 +90,7 @@ def get_crypto_prices(symbols):
 
     try:
         response = requests.get(url, headers=headers, params=parameters)
+        print(response.json())
         if response.status_code == 200:
             data = response.json()
             prices = {}
@@ -111,37 +113,43 @@ def get_crypto_prices(symbols):
             return prices
         else:
             logging.error(f"API request failed with status code {response.status_code}")
-            return {symbol: (None, None, None, None, None) for symbol in symbols}
     except requests.exceptions.RequestException as e:
         logging.error(f"API request exception: {e}")
-        return {symbol: (None, None, None, None, None) for symbol in symbols}
+    
+    # Assurez-vous de retourner un dictionnaire vide ou avec des valeurs par défaut si la requête échoue.
+    return {symbol: (None, None, None, None, None) for symbol in symbols}
+
         
 @cache.memoize(timeout=1000)
 def get_ti_prices():
     url = "https://api.tokeninsight.com/api/v1/rating/coins"
 
+    # Assurez-vous que le nom de l'en-tête pour la clé API est correct selon la documentation de l'API TokenInsight.
     headers = {
-        "accept": "application/json",
-        "TI_API_KEY": os.getenv("TOKENINSIGHT_API_KEY"),
+        "Accept": "application/json",
+        "Authorization": f"Bearer {os.getenv('TOKENINSIGHT_API_KEY')}",
     }
 
-    response = requests.get(url, headers=headers)
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()  # Cela va lever une exception pour les codes 4xx et 5xx
 
-    # Check if the request was successful
-    if response.status_code == 200:
         # Parse the JSON data directly from the response
         data = response.json()
 
         # Extract the list of items (cryptocurrencies)
-        items = data["data"]["items"]
+        items = data.get("data", {}).get("items", [])
 
-        # Extract the symbol and rating_score for each item
-        crypto_info = [(item["symbol"], item["rating_score"]) for item in items]
+        # Créer un dictionnaire avec le symbole comme clé et le rating_score comme valeur
+        crypto_info = {item["symbol"]: item["rating_score"] for item in items}
 
         return crypto_info
-    else:
-        print(f"Failed to fetch data from token insigh API: {response.status_code}")
-        exit
+    except requests.RequestException as e:
+        print(f"Failed to fetch data from token insight API: {e}")
+
+    # Retourner un dictionnaire vide si la requête échoue pour maintenir la cohérence du type de retour
+    return {}
+
 
 
 @app.route('/')
@@ -382,7 +390,9 @@ def index(column='market_cap', order='desc'):
 
     # the token insight prices maj
     prices = get_ti_prices()
-    for symbol, score in prices:
+    
+
+    for symbol, score in prices.items():
         updated_cryptos = []
         for item in cryptos:
             if item[1] == symbol:
@@ -395,6 +405,7 @@ def index(column='market_cap', order='desc'):
     
     symbols = [crypto[1] for crypto in cryptos]
     prices = get_crypto_prices(symbols)
+
     updated_cryptos = []
 
     for crypto in cryptos:
