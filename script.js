@@ -78,19 +78,27 @@ function connectParticles() {
     }
 }
 
-// Boucle d'animation
-function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height); // Effacer le canvas
-    for (let i = 0; i < particlesArray.length; i++) {
-        particlesArray[i].update();
-        particlesArray[i].draw();
-    }
-    connectParticles();
-    requestAnimationFrame(animate); // Demander la prochaine frame
-}
+// Nouvelle fonction pour connecter la souris aux particules
+function connectMouseToParticles() {
+    if (mouse.x === null || mouse.y === null) return; // Ne rien faire si la souris est hors du canvas
 
-// Lancer l'animation
-animate();
+    let opacityValue = 1;
+    for (let i = 0; i < particlesArray.length; i++) {
+        let dx = particlesArray[i].x - mouse.x;
+        let dy = particlesArray[i].y - mouse.y;
+        let distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < mouse.radius) {
+            opacityValue = 1 - (distance / mouse.radius);
+            ctx.strokeStyle = `rgba(224, 224, 224, ${opacityValue})`; // Même couleur que les lignes particules
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(mouse.x, mouse.y);
+            ctx.lineTo(particlesArray[i].x, particlesArray[i].y);
+            ctx.stroke();
+        }
+    }
+}
 
 // Optionnel : Interaction avec la souris
 const mouse = {
@@ -108,6 +116,21 @@ window.addEventListener('mouseout', () => {
     mouse.x = null;
     mouse.y = null;
 });
+
+// Boucle d'animation
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Effacer le canvas
+    for (let i = 0; i < particlesArray.length; i++) {
+        particlesArray[i].update();
+        particlesArray[i].draw();
+    }
+    connectParticles();
+    connectMouseToParticles();
+    requestAnimationFrame(animate); // Demander la prochaine frame
+}
+
+// Lancer l'animation
+animate();
 
 // Ajuster la fonction connectParticles pour l'interaction souris (exemple simple)
 // (Remplacer la fonction connectParticles existante ou l'ajouter)
