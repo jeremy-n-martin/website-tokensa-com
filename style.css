@@ -1,7 +1,7 @@
 body {
     margin: 0;
     overflow: hidden; /* Empêche les barres de défilement */
-    background-color: #00b7ff; /* Fond sombre */
+    background-color: rgb(0, 183, 255); /* Fond sombre */
 }
 
 canvas {
