@@ -1,170 +1,69 @@
+/* ----- Layout global ----- */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
 body {
-    margin: 0;
-    overflow: hidden; /* Empêche les barres de défilement */
-    background-color: #111; /* Fond plus sombre pour le contraste */
-    color: #eee; /* Texte clair */
-    font-family: sans-serif; /* Police simple */
-    display: flex; /* Utiliser flexbox pour centrer le contenu */
-    justify-content: center;
-    align-items: flex-start; /* Changer center par flex-start */
-    min-height: 100vh; /* Prendre toute la hauteur */
-    padding-top: 5vh; /* Ajouter un peu d'espace en haut */
-    padding-bottom: 5vh; /* Ajouter de l'espace en bas pour le scroll */
+  margin: 0;
+  background: #111;               /* fond foncé */
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: #111;                     /* la carte posera sa propre couleur */
+  overflow: hidden;                /* pas de scroll de page, la carte scrollera si besoin */
 }
 
-canvas {
-    display: block; /* Supprime l'espace sous le canvas */
-}
-
-#plexus-canvas { /* Renommé pour correspondre à l'ID dans l'HTML */
-    position: absolute; /* Pour le mettre en arrière-plan */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1; /* Le placer derrière le contenu */
-}
-
-#language-switcher {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 10; /* S'assurer qu'il est au-dessus du canvas */
-}
-
-#language-switcher button {
-    margin-left: 10px;
-    padding: 8px 15px;
-    cursor: pointer;
-    background-color: #333;
-    color: #eee;
-    border: none;
-    border-radius: 4px;
-}
-
-#language-switcher button:hover {
-    background-color: #555;
-}
-
-#content-container {
-    position: relative; /* Pour que z-index fonctionne */
-    z-index: 5; /* Au-dessus du canvas mais potentiellement sous le sélecteur de langue si nécessaire */
-    background-color: rgba(0, 0, 0, 0.7); /* Fond semi-transparent pour la lisibilité */
-    padding: 30px;
-    border-radius: 8px;
-    max-width: 800px; /* Augmenter un peu la largeur max */
-    width: 90%; /* S'assurer que ça ne colle pas aux bords sur petit écran */
-    max-height: 90vh; /* Limiter la hauteur à 90% de la vue */
-    overflow-y: auto; /* Activer le défilement vertical si nécessaire */
-    text-align: left; /* Aligner le texte à gauche pour une meilleure lisibilité */
-
-    /* Hide scrollbar for IE, Edge and Firefox */
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-}
-
-/* Hide scrollbar for Chrome, Safari and Opera */
-#content-container::-webkit-scrollbar {
-    display: none;
-}
-
-.language-section {
-    display: none; /* Masquer par défaut */
-}
-
-.language-section.active {
-    display: block; /* Afficher seulement si la classe active est présente */
-}
-
-h1 {
-    color: #0af; /* Couleur accentuée pour le titre */
-    margin-bottom: 20px;
-    text-align: center; /* Centrer le titre principal */
-}
-
-p {
-    line-height: 1.6; /* Améliorer la lisibilité */
-} 
-
-
-#content-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(255, 255, 255, 0.9);
-    padding: 2rem;
-    border-radius: 1rem;
-    max-width: 480px;
-    width: 90%;
-    font-family: system-ui, sans-serif;
-  }
-  
-  form {
-    margin-top: 1rem;
-  }
-  
-  fieldset {
-    border: 1px solid #ccc;
-    padding: 0.5rem 1rem;
-    margin-top: 1rem;
-  }
-  
-  label {
-    display: block;
-    margin: 0.2rem 0;
-  }
-  
-  button {
-    margin-top: 1rem;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-  }
-  
-  #out {
-    margin-top: 1rem;
-    white-space: pre-wrap;
-    background: #f9f9f9;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    max-height: 300px;
-    overflow-y: auto;
-  }
-  
-  #status {
-    font-size: 0.9rem;
-    color: #333;
-  }
-  
-
-
-  /* Canvas en fond, non cliquable */
+/* ----- Canvas Plexus en fond, non cliquable ----- */
 #plexus-canvas {
-    position: fixed;
-    inset: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1;              /* passe derrière */
-    pointer-events: none;     /* laisse cliquer le contenu */
-  }
-  
-  /* Carte centrale lisible au-dessus du canvas */
-  #content-container {
-    position: relative;
-    z-index: 10;              /* passe devant */
-    background: rgba(255,255,255,0.92);
-    color: #111;
-    max-width: 640px;
-    width: min(92vw, 640px);
-    margin: 6vh auto;
-    padding: 1.5rem;
-    border-radius: 14px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  }
-  
-  fieldset { border: 1px solid #ddd; padding: .75rem 1rem; margin-top: 1rem; }
-  label { display: block; margin: .25rem 0; }
-  button { margin-top: 1rem; padding: .5rem 1rem; }
-  #out { margin-top: 1rem; white-space: pre-wrap; background:#f6f6f6; padding:1rem; border-radius:8px; }
-  
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;                     /* derrière */
+  pointer-events: none;            /* ne bloque aucun clic */
+  display: block;
+}
+
+/* ----- Carte centrale (UI) ----- */
+#content-container {
+  position: relative;
+  z-index: 10;                     /* devant le canvas */
+  background: rgba(255,255,255,0.92);
+  color: #111;
+  max-width: 640px;
+  width: min(92vw, 640px);
+  margin: 6vh auto;                /* centrée horizontalement, 6% haut/bas */
+  padding: 1.5rem;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  max-height: 88vh;                /* la carte scrolle si trop haute */
+  overflow: auto;
+}
+
+/* ----- Typo & formulaires ----- */
+h1 {
+  margin: 0 0 0.75rem 0;
+  color: #0af;
+  text-align: center;
+}
+#status { font-size: .95rem; color: #333; }
+
+form { margin-top: 1rem; }
+fieldset {
+  border: 1px solid #ddd;
+  padding: .75rem 1rem;
+  margin-top: 1rem;
+}
+label { display: block; margin: .25rem 0; }
+
+button {
+  margin-top: 1rem;
+  padding: .5rem 1rem;
+  cursor: pointer;
+}
+
+#out {
+  margin-top: 1rem;
+  white-space: pre-wrap;
+  background:#f6f6f6;
+  padding:1rem;
+  border-radius:8px;
+  max-height: 300px;
+  overflow-y: auto;
+}
