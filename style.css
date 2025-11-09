@@ -85,3 +85,86 @@ h1 {
 p {
     line-height: 1.6; /* Améliorer la lisibilité */
 } 
+
+
+#content-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2rem;
+    border-radius: 1rem;
+    max-width: 480px;
+    width: 90%;
+    font-family: system-ui, sans-serif;
+  }
+  
+  form {
+    margin-top: 1rem;
+  }
+  
+  fieldset {
+    border: 1px solid #ccc;
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+  }
+  
+  label {
+    display: block;
+    margin: 0.2rem 0;
+  }
+  
+  button {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+  }
+  
+  #out {
+    margin-top: 1rem;
+    white-space: pre-wrap;
+    background: #f9f9f9;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  
+  #status {
+    font-size: 0.9rem;
+    color: #333;
+  }
+  
+
+
+  /* Canvas en fond, non cliquable */
+#plexus-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;              /* passe derrière */
+    pointer-events: none;     /* laisse cliquer le contenu */
+  }
+  
+  /* Carte centrale lisible au-dessus du canvas */
+  #content-container {
+    position: relative;
+    z-index: 10;              /* passe devant */
+    background: rgba(255,255,255,0.92);
+    color: #111;
+    max-width: 640px;
+    width: min(92vw, 640px);
+    margin: 6vh auto;
+    padding: 1.5rem;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  
+  fieldset { border: 1px solid #ddd; padding: .75rem 1rem; margin-top: 1rem; }
+  label { display: block; margin: .25rem 0; }
+  button { margin-top: 1rem; padding: .5rem 1rem; }
+  #out { margin-top: 1rem; white-space: pre-wrap; background:#f6f6f6; padding:1rem; border-radius:8px; }
+  

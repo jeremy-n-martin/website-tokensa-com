@@ -1,26 +1,47 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moteur Plexus - Portefeuille Crypto</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tokensa — Générateur d’orthophonie</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="/favicon-32x32.png">
 </head>
 <body>
-    <canvas id="plexus-canvas"></canvas>
+  <!-- fond existant -->
+  <canvas id="plexus-canvas"></canvas>
 
+  <!-- contenu de l’app -->
+  <div id="content-container">
+    <h1>Générateur d’orthophonie</h1>
+    <p id="status">Détection du serveur local…</p>
 
-    <div id="content-container">
- 
+    <form id="form">
+      <label>Âge :<br>
+        <input type="number" name="age" min="2" max="120" required>
+      </label><br>
 
+      <fieldset>
+        <legend>Domaines à inclure</legend>
+        <label><input type="checkbox" name="tags" value="dyslexie"> Dyslexie</label>
+        <label><input type="checkbox" name="tags" value="dysorthographie"> Dysorthographie</label>
+        <label><input type="checkbox" name="tags" value="dyspraxie"> Dyspraxie</label>
+        <label><input type="checkbox" name="tags" value="dysphasie"> Dysphasie</label>
+        <label><input type="checkbox" name="tags" value="begaiement"> Bégaiement</label>
+        <label><input type="checkbox" name="tags" value="TDAH"> TDAH</label>
+        <label><input type="checkbox" name="tags" value="dyscalculie"> Dyscalculie</label>
+        <label><input type="checkbox" name="tags" value="articulation"> Articulation</label>
+        <label><input type="checkbox" name="tags" value="comprehension"> Compréhension</label>
+        <label><input type="checkbox" name="tags" value="phonologie"> Phonologie</label>
+      </fieldset>
 
-        
-    </div>
+      <button type="submit">Générer le texte</button>
+    </form>
 
-    <script src="script.js"></script>
+    <pre id="out"></pre>
+  </div>
+
+  <script type="module" src="main.js"></script>
+  <script src="script.js"></script> <!-- ton script Plexus -->
 </body>
-</html> 
+</html>
