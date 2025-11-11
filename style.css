@@ -9,6 +9,7 @@ body {
   overflow: hidden;                /* pas de scroll de page, la carte scrollera si besoin */
 }
 
+
 /* ----- Canvas Plexus en fond, non cliquable ----- */
 #plexus-canvas {
   position: fixed;
