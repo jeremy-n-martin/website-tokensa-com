@@ -26,18 +26,41 @@ $form.addEventListener('submit', async (e) => {
   const data = Object.fromEntries(new FormData($form).entries());
   const tags = (Array.isArray(data.tags) ? data.tags : [data.tags]).filter(Boolean);
 
-  const r = await fetch('http://127.0.0.1:3327/api/generate', {
-    method: 'POST',
-    headers: { 'content-type': 'application/json', 'x-tokensa': 'v1' },
-    body: JSON.stringify({ age: Number(data.age), tags }),
-  });
+  // Validation minimale côté client pour éviter un 400 (et un blocage CORS)
+  if (!tags.length) {
+    $out.textContent = 'Veuillez sélectionner au moins un domaine (ex.: Dyslexie).';
+    return;
+  }
 
-  const reader = r.body.getReader();
-  const decoder = new TextDecoder();
-  while (true) {
-    const { value, done } = await reader.read();
-    if (done) break;
-    $out.textContent += decoder.decode(value);
+  try {
+    const r = await fetch('http://127.0.0.1:3327/api/generate', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'x-tokensa': 'v1' },
+      body: JSON.stringify({ age: Number(data.age), tags }),
+    });
+
+    if (!r.ok) {
+      // Essaie de récupérer un message d’erreur si disponible
+      const txt = await r.text().catch(() => '');
+      throw new Error(`Requête échouée (${r.status}) ${r.statusText}${txt ? ` — ${txt}` : ''}`);
+    }
+
+    if (!r.body) {
+      throw new Error('Flux de réponse indisponible.');
+    }
+
+    const reader = r.body.getReader();
+    const decoder = new TextDecoder();
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      $out.textContent += decoder.decode(value);
+    }
+  } catch (err) {
+    // Cas typique d’erreur fetch (ex.: CORS bloqué, serveur indisponible)
+    $out.textContent =
+      'Erreur lors de la génération. Vérifiez que le serveur local tourne et que votre navigateur autorise l’accès au réseau local.\n' +
+      (err instanceof Error ? err.message : String(err));
   }
 });
 
