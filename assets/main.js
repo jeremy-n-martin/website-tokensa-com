@@ -40,22 +40,11 @@ $form.addEventListener('submit', async (e) => {
     });
 
     if (!r.ok) {
-      // Essaie de récupérer un message d’erreur si disponible
       const txt = await r.text().catch(() => '');
       throw new Error(`Requête échouée (${r.status}) ${r.statusText}${txt ? ` — ${txt}` : ''}`);
     }
-
-    if (!r.body) {
-      throw new Error('Flux de réponse indisponible.');
-    }
-
-    const reader = r.body.getReader();
-    const decoder = new TextDecoder();
-    while (true) {
-      const { value, done } = await reader.read();
-      if (done) break;
-      $out.textContent += decoder.decode(value);
-    }
+    const json = await r.json();
+    $out.textContent = json?.text ?? '(réponse vide)';
   } catch (err) {
     // Cas typique d’erreur fetch (ex.: CORS bloqué, serveur indisponible)
     $out.textContent =
