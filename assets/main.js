@@ -51,12 +51,13 @@ async function detect() {
 $form.addEventListener('submit', async (e) => {
   e.preventDefault();
   $out.textContent = '';
-  const data = Object.fromEntries(new FormData($form).entries());
-  const tags = (Array.isArray(data.tags) ? data.tags : [data.tags]).filter(Boolean);
+  const fd = new FormData($form);
+  const data = Object.fromEntries(fd.entries());
+  const tags = fd.getAll('tags').map(String).filter(Boolean);
 
   // Validation minimale côté client pour éviter un 400 (et un blocage CORS)
   if (!tags.length) {
-    $out.textContent = 'Veuillez sélectionner au moins un domaine (ex.: Dyslexie).';
+    $out.textContent = 'Veuillez sélectionner au moins un item.';
     return;
   }
 
