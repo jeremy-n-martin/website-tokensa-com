@@ -6,7 +6,7 @@ body {
   background: #111;               /* fond foncé */
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   color: #111;                     /* la carte posera sa propre couleur */
-  overflow: hidden;                /* pas de scroll de page, la carte scrollera si besoin */
+  overflow-y: auto;                /* autorise le scroll de page */
 }
 
 
@@ -33,14 +33,14 @@ body {
   padding: 1.5rem;
   border-radius: 14px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-  max-height: 88vh;                /* la carte scrolle si trop haute */
-  overflow: auto;
+  max-height: none;               /* pas de limitation en hauteur, la page scrolle */
+  overflow: visible;
 }
 
 /* ----- Typo & formulaires ----- */
 h1 {
   margin: 0 0 0.75rem 0;
-  color: #0af;
+  color: rgb(75, 159, 201);
   text-align: center;
 }
 #status { font-size: .95rem; color: #333; }
@@ -50,7 +50,11 @@ fieldset {
   border: 1px solid #ddd;
   padding: .75rem 1rem;
   margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .25rem 1rem;
 }
+fieldset legend { grid-column: 1 / -1; margin-bottom: .25rem; }
 label { display: block; margin: .25rem 0; }
 
 button {
@@ -67,4 +71,9 @@ button {
   border-radius:8px;
   max-height: 300px;
   overflow-y: auto;
+}
+
+.ac {
+  color: #f8d538; /* bleu clair subtil */
+  font-weight: 600;
 }
