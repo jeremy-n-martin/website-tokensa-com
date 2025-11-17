@@ -1,6 +1,8 @@
 const $status = document.getElementById('status');
 const $form = document.getElementById('form');
 const $out = document.getElementById('out');
+const $loader = document.getElementById('loader');
+const $submitBtn = $form?.querySelector('button[type="submit"]');
 
 // Détection et configuration de l'URL de l'API (remote ou locale)
 const API_BASE = (() => {
@@ -59,6 +61,10 @@ $form.addEventListener('submit', async (e) => {
   }
 
   try {
+    // Affiche le loader et désactive le bouton pendant l'appel
+    $loader?.classList.add('is-visible');
+    if ($submitBtn) $submitBtn.disabled = true;
+
     const r = await fetch(`${API_BASE}/api/generate`, {
       method: 'POST',
       headers: { 'content-type': 'application/json', 'x-tokensa': 'v1' },
@@ -76,6 +82,10 @@ $form.addEventListener('submit', async (e) => {
     $out.textContent =
       'Erreur lors de la génération. Vérifiez que le serveur local tourne et que votre navigateur autorise l’accès au réseau local.\n' +
       (err instanceof Error ? err.message : String(err));
+  } finally {
+    // Cache le loader et réactive le bouton quoi qu'il arrive
+    $loader?.classList.remove('is-visible');
+    if ($submitBtn) $submitBtn.disabled = false;
   }
 });
 
