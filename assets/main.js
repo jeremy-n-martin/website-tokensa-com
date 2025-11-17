@@ -2,20 +2,46 @@ const $status = document.getElementById('status');
 const $form = document.getElementById('form');
 const $out = document.getElementById('out');
 
+// Détection et configuration de l'URL de l'API (remote ou locale)
+const API_BASE = (() => {
+  const params = new URLSearchParams(location.search);
+  const override = params.get('server');
+  const saved = localStorage.getItem('tokensa_api_base');
+  const candidate = override || saved;
+  if (candidate) {
+    try {
+      const u = new URL(candidate);
+      // Normalise: retire les / finaux
+      const norm = `${u.origin}${u.pathname}`.replace(/\/+$/, '');
+      // Persiste si fourni via query
+      if (override) localStorage.setItem('tokensa_api_base', norm);
+      return norm;
+    } catch {}
+  }
+  // Prod: domaine principal -> API publique
+  if (location.hostname === 'tokensa.com' || location.hostname === 'www.tokensa.com') {
+    return 'https://api.tokensa.com';
+  }
+  // Dev local par défaut
+  return 'http://127.0.0.1:3327';
+})();
+
 async function detect() {
   try {
     const ctrl = new AbortController();
     const t = setTimeout(() => ctrl.abort(), 500);
-    const r = await fetch('http://127.0.0.1:3327/api/health', { signal: ctrl.signal });
+    const r = await fetch(`${API_BASE}/api/health`, { signal: ctrl.signal });
     clearTimeout(t);
     if (r.ok) {
-      $status.textContent = 'Serveur local détecté ✅';
+      $status.innerHTML = `API Tokensa détectée ✅ — <a href="${API_BASE}/api/health" target="_blank" rel="noopener">${API_BASE}</a>`;
       return true;
     }
   } catch {}
   $status.innerHTML =
-    'Serveur local non détecté ❌<br>' +
-    'Installez et lancez <strong>tokensa-local-server</strong> puis cliquez sur <button id="retry">Réessayer</button>';
+    'API Tokensa non détectée ❌<br>' +
+    `URL actuelle: <code>${API_BASE}</code><br>` +
+    'Vérifiez le domaine/API puis cliquez sur <button id="retry">Réessayer</button><br>' +
+    'Astuce: ajoutez <code>?server=https://api.tokensa.com</code> à l’URL de cette page pour forcer une autre API.';
   document.getElementById('retry')?.addEventListener('click', detect);
   return false;
 }
@@ -33,7 +59,7 @@ $form.addEventListener('submit', async (e) => {
   }
 
   try {
-    const r = await fetch('http://127.0.0.1:3327/api/generate', {
+    const r = await fetch(`${API_BASE}/api/generate`, {
       method: 'POST',
       headers: { 'content-type': 'application/json', 'x-tokensa': 'v1' },
       body: JSON.stringify({ age: Number(data.age), tags }),
