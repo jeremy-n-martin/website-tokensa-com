@@ -3,6 +3,7 @@ const $form = document.getElementById('form');
 const $out = document.getElementById('out');
 const $loader = document.getElementById('loader');
 const $submitBtn = $form?.querySelector('button[type="submit"]');
+const $copyBtn = document.getElementById('copy-btn');
 
 // Détection et configuration de l'URL de l'API (remote ou locale)
 const API_BASE = (() => {
@@ -51,6 +52,10 @@ async function detect() {
 $form.addEventListener('submit', async (e) => {
   e.preventDefault();
   $out.textContent = '';
+  if ($copyBtn) {
+    $copyBtn.disabled = true;
+    $copyBtn.textContent = 'Copier la réponse';
+  }
   const fd = new FormData($form);
   const data = Object.fromEntries(fd.entries());
   const tags = fd.getAll('tags').map(String).filter(Boolean);
@@ -69,7 +74,12 @@ $form.addEventListener('submit', async (e) => {
     const r = await fetch(`${API_BASE}/api/generate`, {
       method: 'POST',
       headers: { 'content-type': 'application/json', 'x-tokensa': 'v1' },
-      body: JSON.stringify({ age: Number(data.age), tags }),
+      body: JSON.stringify({
+        age: Number(data.age),
+        tags,
+        prenom: data.prenom || undefined,
+        nom: data.nom || undefined,
+      }),
     });
 
     if (!r.ok) {
@@ -77,7 +87,13 @@ $form.addEventListener('submit', async (e) => {
       throw new Error(`Requête échouée (${r.status}) ${r.statusText}${txt ? ` — ${txt}` : ''}`);
     }
     const json = await r.json();
-    $out.textContent = json?.text ?? '(réponse vide)';
+    const text = json?.text ?? '(réponse vide)';
+    $out.textContent = text;
+
+    if ($copyBtn) {
+      const hasContent = typeof text === 'string' && text.trim().length > 0 && text !== '(réponse vide)';
+      $copyBtn.disabled = !hasContent;
+    }
   } catch (err) {
     // Cas typique d’erreur fetch (ex.: CORS bloqué, serveur indisponible)
     $out.textContent =
@@ -87,6 +103,26 @@ $form.addEventListener('submit', async (e) => {
     // Cache le loader et réactive le bouton quoi qu'il arrive
     $loader?.classList.remove('is-visible');
     if ($submitBtn) $submitBtn.disabled = false;
+  }
+});
+
+// Bouton "Copier la réponse"
+$copyBtn?.addEventListener('click', async () => {
+  const text = $out?.textContent?.trim();
+  if (!text) return;
+
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(text);
+      if ($copyBtn) {
+        $copyBtn.textContent = 'Copié !';
+        setTimeout(() => {
+          $copyBtn.textContent = 'Copier la réponse';
+        }, 2000);
+      }
+    }
+  } catch (err) {
+    console.error('Erreur lors de la copie dans le presse-papiers', err);
   }
 });
 

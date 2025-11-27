@@ -27,6 +27,14 @@
         <input type="number" name="age" min="2" max="120" required>
       </label><br>
 
+      <label>Prénom du patient (optionnel) :<br>
+        <input type="text" name="prenom" autocomplete="given-name">
+      </label><br>
+
+      <label>Nom du patient (optionnel) :<br>
+        <input type="text" name="nom" autocomplete="family-name">
+      </label><br>
+
       
       <fieldset>
         <legend>Domaines à inclure</legend>
@@ -120,7 +128,10 @@
         </details>
       </fieldset>
 
-      <button type="submit">Générer le texte</button>
+      <div class="button-row">
+        <button type="submit">Générer le texte</button>
+        <button type="button" id="copy-btn" disabled>Copier la réponse</button>
+      </div>
     </form>
 
     <pre id="out"></pre>
