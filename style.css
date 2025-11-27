@@ -57,6 +57,19 @@ fieldset {
 fieldset legend { grid-column: 1 / -1; margin-bottom: .25rem; }
 label { display: block; margin: .25rem 0; }
 
+.inline-fieldset {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.inline-fieldset label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin: 0;
+}
+
 button {
   padding: .5rem 1rem;
   cursor: pointer;

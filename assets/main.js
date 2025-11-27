@@ -71,6 +71,11 @@ $form.addEventListener('submit', async (e) => {
     $loader?.classList.add('is-visible');
     if ($submitBtn) $submitBtn.disabled = true;
 
+    let homme;
+    if (typeof data.homme === 'string' && data.homme !== '') {
+      homme = data.homme === 'true';
+    }
+
     const r = await fetch(`${API_BASE}/api/generate`, {
       method: 'POST',
       headers: { 'content-type': 'application/json', 'x-tokensa': 'v1' },
@@ -79,6 +84,7 @@ $form.addEventListener('submit', async (e) => {
         tags,
         prenom: data.prenom || undefined,
         nom: data.nom || undefined,
+        homme,
       }),
     });
 
