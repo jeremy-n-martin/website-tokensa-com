@@ -23,29 +23,31 @@
     <p id="status">Détection du serveur local…</p>
 
     <form id="form">
-      <label>Âge du patient :<br>
-        <input type="number" name="age" min="2" max="120" required>
-      </label><br>
-
-      <label>Prénom du patient (optionnel) :<br>
-        <input type="text" name="prenom" autocomplete="given-name">
-      </label><br>
-
-      <label>Nom du patient (optionnel) :<br>
-        <input type="text" name="nom" autocomplete="family-name">
-      </label><br>
-
-      <fieldset class="inline-fieldset">
-        <legend>Sexe (optionnel)</legend>
-        <label>
-          <input type="radio" name="homme" value="true">
-          Homme
+      <div class="identity-row">
+        <label class="identity-field">Âge du patient :<br>
+          <input type="number" name="age" min="2" max="120" required>
         </label>
-        <label>
-          <input type="radio" name="homme" value="false">
-          Femme
+
+        <label class="identity-field">Prénom du patient (optionnel) :<br>
+          <input type="text" name="prenom" autocomplete="given-name">
         </label>
-      </fieldset>
+
+        <label class="identity-field">Nom du patient (optionnel) :<br>
+          <input type="text" name="nom" autocomplete="family-name">
+        </label>
+
+        <fieldset class="inline-fieldset identity-field">
+          <legend>Sexe (optionnel)</legend>
+          <label>
+            <input type="radio" name="homme" value="true">
+            Homme
+          </label>
+          <label>
+            <input type="radio" name="homme" value="false">
+            Femme
+          </label>
+        </fieldset>
+      </div>
 
       
       <fieldset>
